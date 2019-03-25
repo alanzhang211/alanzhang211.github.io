@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="2018,数据同步,DataX,大数据,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="悟" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本文为个人理解，如有不对之处，欢迎指正。  前言之前，工作中使用datax作为数据交换组件。也简单的介绍了下datax和源码的基本导读。具体参见DataX初探。数据开发平台在数据交换同步上，从sqoop、kettle等工具，慢慢地向datax并拢。 挑战datax的扩展性很好，插件式安装配置。在实际使用中，往往针对实际的场景需要定制自己的读或写插件。关于如何编写插件，datax官网上也做了阐述，">
+<meta name="keywords" content="2018,数据同步,DataX,大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DataX二次开发小记">
+<meta property="og:url" content="http://alanzhang.me/2018/10/17/DataX二次开发小记/index.html">
+<meta property="og:site_name" content="悟">
+<meta property="og:description" content="本文为个人理解，如有不对之处，欢迎指正。  前言之前，工作中使用datax作为数据交换组件。也简单的介绍了下datax和源码的基本导读。具体参见DataX初探。数据开发平台在数据交换同步上，从sqoop、kettle等工具，慢慢地向datax并拢。 挑战datax的扩展性很好，插件式安装配置。在实际使用中，往往针对实际的场景需要定制自己的读或写插件。关于如何编写插件，datax官网上也做了阐述，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/alanzhang211/learning-note/blob/master/img/mysql-hive.png">
+<meta property="og:image" content="https://github.com/alanzhang211/learning-note/blob/master/img/WechatIMG106.png">
+<meta property="og:updated_time" content="2019-02-26T15:14:20.375Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DataX二次开发小记">
+<meta name="twitter:description" content="本文为个人理解，如有不对之处，欢迎指正。  前言之前，工作中使用datax作为数据交换组件。也简单的介绍了下datax和源码的基本导读。具体参见DataX初探。数据开发平台在数据交换同步上，从sqoop、kettle等工具，慢慢地向datax并拢。 挑战datax的扩展性很好，插件式安装配置。在实际使用中，往往针对实际的场景需要定制自己的读或写插件。关于如何编写插件，datax官网上也做了阐述，">
+<meta name="twitter:image" content="https://github.com/alanzhang211/learning-note/blob/master/img/mysql-hive.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://alanzhang.me/2018/10/17/DataX二次开发小记/">
+
+
+
+
+
+  <title>DataX二次开发小记 | 悟</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f918b43482e1dfb005ebac268b144dbe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">悟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">心与心的交互</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2018/10/17/DataX二次开发小记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alan Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="悟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DataX二次开发小记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-17T23:17:34+08:00">
+                2018-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/10/17/DataX二次开发小记/" class="leancloud_visitors" data-flag-title="DataX二次开发小记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文为个人理解，如有不对之处，欢迎指正。</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前，工作中使用datax作为数据交换组件。也简单的介绍了下datax和源码的基本导读。具体参见<a href="http://alanzhang.me/2018/04/14/DataX%E5%88%9D%E6%8E%A2/#more">DataX初探</a>。数据开发平台在数据交换同步上，从sqoop、kettle等工具，慢慢地向datax并拢。</p>
+<h2 id="挑战"><a href="#挑战" class="headerlink" title="挑战"></a>挑战</h2><p>datax的扩展性很好，插件式安装配置。在实际使用中，往往针对实际的场景需要定制自己的读或写插件。关于如何编写插件，datax官网上也做了阐述，这里就不在赘述。详细参见：<a href="https://github.com/alibaba/DataX/blob/master/dataxPluginDev.md" target="_blank" rel="noopener">datax插件开发</a>。</p>
+<a id="more"></a>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>拿项目中的一个点需求：<strong>实现mysql的增量数据同步到hive</strong> 来阐插件开发过程。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><ol>
+<li>数据变更来源：mysql变更，通过收集binlog日志进行处理，同步到kafka中。</li>
+<li>目标数据源：hive增量分区表，通过Hbase作为中间表处理数据变更，hive建立外部表与之关联。</li>
+</ol>
+<p><img src="https://github.com/alanzhang211/learning-note/blob/master/img/mysql-hive.png" alt="数据流走向"></p>
+<h3 id="插件定制"><a href="#插件定制" class="headerlink" title="插件定制"></a>插件定制</h3><ol>
+<li>开发从kafka读插件。</li>
+<li>开发kafka到hbase到写插件。</li>
+<li>定制hbase读插件。</li>
+<li>开发hive写插件。</li>
+</ol>
+<hr>
+<h2 id="为什么？见下文"><a href="#为什么？见下文" class="headerlink" title="为什么？见下文"></a>为什么？见下文</h2><h3 id="插件说明"><a href="#插件说明" class="headerlink" title="插件说明"></a>插件说明</h3><h4 id="kafka读插件"><a href="#kafka读插件" class="headerlink" title="kafka读插件"></a>kafka读插件</h4><p>由于mysql的binlog会写入到kafka中，所以数据来源需要增加一个可以从kafka中读取的插件<code>kafkareader</code>。</p>
+<p><strong>插件json定义</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;kafkareader&quot;,</span><br><span class="line">  &quot;parameter&quot;: &#123;</span><br><span class="line">    &quot;bootstrapServers&quot;: &quot;&quot;,</span><br><span class="line">    &quot;topic&quot;: &quot;&quot;,</span><br><span class="line">    &quot;groupId&quot;: &quot;&quot;,</span><br><span class="line">    &quot;decoder&quot;: &quot;text&quot;,</span><br><span class="line">    &quot;properties&quot;: &#123;&#125;,</span><br><span class="line">    &quot;pollTimeoutMS&quot;: 100,</span><br><span class="line">    &quot;partitionInitSeekTo&quot;: &quot;begin&quot;,</span><br><span class="line">    &quot;startOffsets&quot;: &#123;</span><br><span class="line">      &quot;0&quot;: 0,</span><br><span class="line">      &quot;1&quot;: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;endOffsets&quot;: &#123;</span><br><span class="line">      &quot;0&quot;: 0,</span><br><span class="line">      &quot;1&quot;: 0</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="kafka写hbase插件"><a href="#kafka写hbase插件" class="headerlink" title="kafka写hbase插件"></a>kafka写hbase插件</h4><p>由于数据格式定制化，从公司的kafka中读取pb序列化的数据。需要解析数据加工处理。因此，在写插件中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void startWriter(RecordReceiver lineReceiver)</span><br></pre></td></tr></table></figure></p>
+<p>方法中，读取记录处理过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">convertRecordToPut(Record record)</span><br></pre></td></tr></table></figure></p>
+<p>进行了定制处理。</p>
+<h4 id="hbase读插件"><a href="#hbase读插件" class="headerlink" title="hbase读插件"></a>hbase读插件</h4><p>针对分库分表的情况，从kafka读取出来的消息存储与hbase中， <code>rowkey</code>的格式为<code>db.table.pk</code>。所以同步同一张mysql表，hbase的rowkey可能会出现多组。如果是每天同步，可能还会落到不同的表中。这就需要hbase读插件支持多组table，多组rowkey处理。</p>
+<p><strong>原始插件json格式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;hbase11xwriter&quot;,</span><br><span class="line">    &quot;parameter&quot;: &#123;</span><br><span class="line">        &quot;hbaseConfig&quot;: &#123;</span><br><span class="line">            &quot;hbase.rootdir&quot;: &quot;&quot;,</span><br><span class="line">            &quot;hbase.cluster.distributed&quot;: &quot;&quot;,</span><br><span class="line">            &quot;hbase.zookeeper.quorum&quot;: &quot;&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;table&quot;: &quot;&quot;,</span><br><span class="line">        &quot;mode&quot;: &quot;&quot;,</span><br><span class="line">        &quot;rowkeyColumn&quot;: [</span><br><span class="line">        ],</span><br><span class="line">        &quot;column&quot;: [</span><br><span class="line">        ],</span><br><span class="line">        &quot;versionColumn&quot;:&#123;</span><br><span class="line">            &quot;index&quot;: &quot;&quot;,</span><br><span class="line">            &quot;value&quot;:&quot;&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;encoding&quot;: &quot;&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>定制版插件json定制</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;hbase11reader&quot;,</span><br><span class="line">    &quot;parameter&quot;: &#123;</span><br><span class="line">        &quot;hbaseConfig&quot;: &#123;&#125;,</span><br><span class="line">        &quot;tableConfig&quot;: [&#123;</span><br><span class="line">                &quot;table&quot;: &quot;&quot;,</span><br><span class="line">                &quot;range&quot;: [&#123;</span><br><span class="line">                        &quot;startRowkey&quot;: &quot;&quot;,</span><br><span class="line">                        &quot;endRowkey&quot;: &quot;&quot;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        &quot;startRowkey&quot;: &quot;&quot;,</span><br><span class="line">                        &quot;endRowkey&quot;: &quot;&quot;</span><br><span class="line">                    &#125;]</span><br><span class="line">        &#125;],</span><br><span class="line">        &quot;date&quot;:&quot;&quot;,</span><br><span class="line">        &quot;encoding&quot;: &quot;&quot;,</span><br><span class="line">        &quot;mode&quot;: &quot;&quot;,</span><br><span class="line">        &quot;column&quot;: [],</span><br><span class="line">        &quot;isBinaryRowkey&quot;: true</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对比，主要的变化就是从单表<code>table</code>变为多表<code>tableConfig</code>数组配置项。</p>
+<p>后续，讲以此插件的定义过程，讲解插件开发思路。</p>
+<h4 id="hive写插件"><a href="#hive写插件" class="headerlink" title="hive写插件"></a>hive写插件</h4><p>由于要支持hive分区处理。所以，原生的datax实现hive的读、写，底层原理是通过直接操作hdfs的方式处理的（使用hdfsreader、hdfswriter）。</p>
+<p>这样，就hive表的分区信息一无所知。因此，这里采用<code>HCatalog</code>作为操作hive数据的接口。关于<code>HCatalog</code>简单说明：</p>
+<blockquote>
+<p>HCatalog屏蔽了底层数据存储的位置格式等信息，为上层计算处理流程提供统一的、共享的metadata。并且将数据以表的形式呈现给用户（如Pig,MR,Hive,Streaming..），用户只需提供表名就可以访问底层数据，并不需要关心底层数据的位置，模式等信息。</p>
+</blockquote>
+<p><strong>插件josn定义</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;hivewriter&quot;,</span><br><span class="line">  &quot;parameter&quot;: &#123;</span><br><span class="line">    &quot;database&quot;: &quot;&quot;,</span><br><span class="line">    &quot;table&quot;: &quot;&quot;,</span><br><span class="line">    &quot;partition&quot;: &quot;&quot;,</span><br><span class="line">    &quot;hadoopConf&quot;: [</span><br><span class="line">      &quot;&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;kerberosPrincipal&quot;: &quot;&quot;,</span><br><span class="line">    &quot;kerberosKeytab&quot;: &quot;&quot;,</span><br><span class="line">    &quot;batchSize&quot;: 10000,</span><br><span class="line">    &quot;overwrite&quot;: false</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="进入主题"><a href="#进入主题" class="headerlink" title="进入主题"></a>进入主题</h2><h2 id="插件开发过程"><a href="#插件开发过程" class="headerlink" title="插件开发过程"></a>插件开发过程</h2><p>针对上述定制插件中的hbasereader进行讲述。针对读写插件，总结下来就是<code>一个配置，2个对象</code>。</p>
+<p><img src="https://github.com/alanzhang211/learning-note/blob/master/img/WechatIMG106.png" alt="读写组件"></p>
+<h3 id="一个配置"><a href="#一个配置" class="headerlink" title="一个配置"></a>一个配置</h3><p>就是插件的json配置，最终在代码层次上会抽象为<code>Configuration</code>对象。这是任务执行的依据。</p>
+<h3 id="2个对象"><a href="#2个对象" class="headerlink" title="2个对象"></a>2个对象</h3><ol>
+<li>job：作业信息载体。</li>
+<li>task：作业执行载体。</li>
+</ol>
+<h3 id="核心方法"><a href="#核心方法" class="headerlink" title="核心方法"></a>核心方法</h3><h4 id="Job-split"><a href="#Job-split" class="headerlink" title="Job.split"></a>Job.split</h4><p>这是一个任务切分处理逻辑，最终会讲总的json，拆分成最小的执行单元配置传递给task。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public List&lt;Configuration&gt; split(int adviceNumber) &#123;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对此定制插件，就是通过split方法，将<code>tableConfig</code>拆分，退化为最原始插件的配置形式（单个table，单组rowkey）。最终，针对task而言，执行配置<code>split</code>处理逻辑也不变。</p>
+<h4 id="Task-startRead"><a href="#Task-startRead" class="headerlink" title="Task.startRead"></a>Task.startRead</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public void startRead(RecordSender recordSender) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个是读记录过程，也是读插件的核心。经过Job的split处理后，对于task的Configuration处理过程也是和原始的一样。这里要做的就是：<strong>是否需要对读记录进行二次处理加工</strong>。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>之后，就会将task提交个任务执行容器框架去处理。另外，如果需要统计处理，也可以在<code>Task.startRead</code>中调用<code>TaskPluginCollector</code>任务收集器进行统计收集。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>此次开发定制，深入到插件层，对插件的数据走向有了深入了解。同时也对很多组件（kafka、hbase、hive等）有了了解。</p>
+<hr>
+<p><em>实践出真知</em></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/qrcode.jpg" alt="Alan Zhang wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号“补愚者说”，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Alan Zhang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://alanzhang.me/2018/10/17/DataX二次开发小记/" title="DataX二次开发小记">http://alanzhang.me/2018/10/17/DataX二次开发小记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/2018/" rel="tag"># 2018</a>
+          
+            <a href="/tags/数据同步/" rel="tag"># 数据同步</a>
+          
+            <a href="/tags/DataX/" rel="tag"># DataX</a>
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/07/十一哈巴雪山-丽江行/" rel="next" title="十一哈巴雪山-丽江行">
+                <i class="fa fa-chevron-left"></i> 十一哈巴雪山-丽江行
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/02/王德发，我的图挂了/" rel="prev" title="王德发，我的图挂了">
+                王德发，我的图挂了 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzM5Ni8xOTkzNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Alan Zhang">
+            
+              <p class="site-author-name" itemprop="name">Alan Zhang</p>
+              <p class="site-description motion-element" itemprop="description">聆听内心的每一次呼吸</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">199</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/alanzhang211" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:alanzhang211@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/alanzhang211" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/alanzhang211" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#挑战"><span class="nav-number">2.</span> <span class="nav-text">挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目标"><span class="nav-number">3.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">4.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插件定制"><span class="nav-number">4.1.</span> <span class="nav-text">插件定制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么？见下文"><span class="nav-number">5.</span> <span class="nav-text">为什么？见下文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插件说明"><span class="nav-number">5.1.</span> <span class="nav-text">插件说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kafka读插件"><span class="nav-number">5.1.1.</span> <span class="nav-text">kafka读插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kafka写hbase插件"><span class="nav-number">5.1.2.</span> <span class="nav-text">kafka写hbase插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hbase读插件"><span class="nav-number">5.1.3.</span> <span class="nav-text">hbase读插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hive写插件"><span class="nav-number">5.1.4.</span> <span class="nav-text">hive写插件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进入主题"><span class="nav-number">6.</span> <span class="nav-text">进入主题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件开发过程"><span class="nav-number">7.</span> <span class="nav-text">插件开发过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个配置"><span class="nav-number">7.1.</span> <span class="nav-text">一个配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2个对象"><span class="nav-number">7.2.</span> <span class="nav-text">2个对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心方法"><span class="nav-number">7.3.</span> <span class="nav-text">核心方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Job-split"><span class="nav-number">7.3.1.</span> <span class="nav-text">Job.split</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Task-startRead"><span class="nav-number">7.3.2.</span> <span class="nav-text">Task.startRead</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">7.4.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">8.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alan Zhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("3FyxSKHmT3h8Yzt0acMtQM5e-gzGzoHsz", "tJV7duG1GgtXVsM3YcrBLhHA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Wechat,Linkedin,Douban,QQZone,Twitter,Facebook,Weibo";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

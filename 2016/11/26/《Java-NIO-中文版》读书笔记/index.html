@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="2016,java,Nio,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="悟" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="百度网盘资源下载">
+<meta name="keywords" content="2016,java,Nio">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Java NIO 中文版》读书笔记">
+<meta property="og:url" content="http://alanzhang.me/2016/11/26/《Java-NIO-中文版》读书笔记/index.html">
+<meta property="og:site_name" content="悟">
+<meta property="og:description" content="百度网盘资源下载">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/book/2016/11/s27298846.jpg">
+<meta property="og:updated_time" content="2019-02-26T15:14:20.386Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Java NIO 中文版》读书笔记">
+<meta name="twitter:description" content="百度网盘资源下载">
+<meta name="twitter:image" content="https://github.com/alanzhang211/blog-image/raw/master/book/2016/11/s27298846.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://alanzhang.me/2016/11/26/《Java-NIO-中文版》读书笔记/">
+
+
+
+
+
+  <title>《Java NIO 中文版》读书笔记 | 悟</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f918b43482e1dfb005ebac268b144dbe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">悟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">心与心的交互</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2016/11/26/《Java-NIO-中文版》读书笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alan Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="悟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Java NIO 中文版》读书笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-26T08:11:29+08:00">
+                2016-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/11/26/《Java-NIO-中文版》读书笔记/" class="leancloud_visitors" data-flag-title="《Java NIO 中文版》读书笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.1k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://github.com/alanzhang211/blog-image/raw/master/book/2016/11/s27298846.jpg" alt="java nio"></p>
+<ul>
+<li><a href="http://pan.baidu.com/s/1o7FwRFG" target="_blank" rel="noopener">百度网盘资源下载</a></li>
+</ul>
+<a id="more"></a>
+<h1 id="缓冲区buffer"><a href="#缓冲区buffer" class="headerlink" title="缓冲区buffer"></a>缓冲区buffer</h1><h2 id="缓冲区基础"><a href="#缓冲区基础" class="headerlink" title="缓冲区基础"></a>缓冲区基础</h2><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><p>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</p>
+<h3 id="缓冲区api"><a href="#缓冲区api" class="headerlink" title="缓冲区api"></a>缓冲区api</h3><ul>
+<li>级联类设计：返回对象的引用</li>
+</ul>
+<h3 id="存取"><a href="#存取" class="headerlink" title="存取"></a>存取</h3><ul>
+<li>get()和put()方法，并没有在buffer中声明（参数类型和返回类型对于每个子类都是唯一的）。</li>
+</ul>
+<h3 id="填充"><a href="#填充" class="headerlink" title="填充"></a>填充</h3><ul>
+<li>flip：“对当前位置设置限制，然后将该位置设置为零。” 将一个能够继续添加数据元素的填充状态的缓冲区翻转成一个准备读出元素的释放状态。</li>
+<li>rewind：将当前位置设置为0，后退重读被翻转的缓冲区数据。</li>
+</ul>
+<h3 id="释放"><a href="#释放" class="headerlink" title="释放"></a>释放</h3><ul>
+<li>remaining()：将告知您从当前位置到上界还剩余的元素数目</li>
+<li>缓冲区不是线程安全的；如果多线程进行存取，需要进行同步处理。</li>
+<li>clear()将上界设置为容量的值，并把位置设置为0，并不改变缓冲区的任何元素。</li>
+</ul>
+<h3 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h3><ul>
+<li>compact()：将 position 与 limit之间的数据复制到buffer的开始位置，复制后 position  = limit -position,limit = capacity.<br>调用compact()的作用是丢弃已经释放的数据，保留未释放的数据，并使缓冲区对重新填充容量准备就绪</li>
+</ul>
+<h3 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h3><p><em>标记，使缓冲区能够记住一个位置并在之后将其返回。</em></p>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><ul>
+<li>equals()：如果每个缓冲区中剩余的内容相同，那么函数将返回true，否则返回false。</li>
+<li>两个缓冲区相等，充要条件</li>
+</ul>
+<ul>
+<li>存储的对象类型相同</li>
+<li>剩余同样数量的元素，buffer容量不需要相同，剩余数据的索引也不必相同，但每个缓冲区中剩余的元素的数目必须相同。</li>
+<li>每个缓冲区中应被get函数返回的属于数据元素序列必须一致。</li>
+</ul>
+<ul>
+<li>compareTo()：不允许不同对象进行比较；比较针对每个缓冲区内剩余元素进行的。</li>
+</ul>
+<h3 id="批量移动"><a href="#批量移动" class="headerlink" title="批量移动"></a>批量移动</h3><ul>
+<li>get移动元素</li>
+<li>在调用get之前必须先查询缓冲区中的元素数量。</li>
+<li>put：向缓冲区填充元素</li>
+</ul>
+<h2 id="创建缓冲区"><a href="#创建缓冲区" class="headerlink" title="创建缓冲区"></a>创建缓冲区</h2><ul>
+<li>MappedByteBuffer是ByteBuffer专门用于内存映射的一种特例。</li>
+<li>wrap()</li>
+</ul>
+<h2 id="复制缓冲区"><a href="#复制缓冲区" class="headerlink" title="复制缓冲区"></a>复制缓冲区</h2><h2 id="字节缓冲区"><a href="#字节缓冲区" class="headerlink" title="字节缓冲区"></a>字节缓冲区</h2><h1 id="通道Channel"><a href="#通道Channel" class="headerlink" title="通道Channel"></a>通道Channel</h1><p><em>Channel用于在字节缓冲区和位于通道另一侧的实体（通常是一个文件或套接字）之间有效地传输数据。</em></p>
+<h2 id="通道基础"><a href="#通道基础" class="headerlink" title="通道基础"></a>通道基础</h2><h3 id="使用通道"><a href="#使用通道" class="headerlink" title="使用通道"></a>使用通道</h3><ul>
+<li>通道可以以阻塞（blocking）或非阻塞（nonblocking）模式运行。非阻塞模式的通道永远不会让调用的线程休眠。请求的操作要么立即完成，要么返回一个结果表明未进行任何操作。只有面向流的（stream-oriented）的通道，如sockets和pipes才能使用非阻塞模式。</li>
+</ul>
+<h3 id="关闭通道"><a href="#关闭通道" class="headerlink" title="关闭通道"></a>关闭通道</h3><ul>
+<li>调用通道的close()方法时，可能会导致在通道关闭底层I/O服务的过程中线程暂时阻塞</li>
+<li>isOpen()方法来测试通道的开放状态。</li>
+<li>当前线程的interrupt status可以通过调用静态的Thread.interrupted( )方法清除。</li>
+</ul>
+<h2 id="Scatter-Gather"><a href="#Scatter-Gather" class="headerlink" title="Scatter/Gather"></a>Scatter/Gather</h2><h2 id="文件通道"><a href="#文件通道" class="headerlink" title="文件通道"></a>文件通道</h2><ul>
+<li>文件通道总是阻塞式的，因此不能被置于非阻塞模式</li>
+<li>FileChannel对象是线程安全（thread-safe）的。</li>
+</ul>
+<h3 id="访问文件"><a href="#访问文件" class="headerlink" title="访问文件"></a>访问文件</h3><h3 id="文件锁"><a href="#文件锁" class="headerlink" title="文件锁"></a>文件锁</h3><ul>
+<li>不带参数的简单形式的lock()方法是一种在整个文件上请求独占锁的便捷方法，锁定区域等于它能达到的最大范围。</li>
+<li>调用带参数的Lock()方法会指定文件内部锁定区域的开始position以及锁定区域的size。</li>
+<li>tryLock是Lock的非阻塞变体</li>
+<li>尽管一个FileLock对象是与某个特定的FileChannel实例关联的，它所代表的锁却是与一个底层文件关联的，而不是与通道关联。</li>
+</ul>
+<h2 id="内存映射文件"><a href="#内存映射文件" class="headerlink" title="内存映射文件"></a>内存映射文件</h2><ul>
+<li>通过内存映射机制来访问一个文件会比使用常规方法读写高效得多，甚至比使用通道的效率都<br>84<br>高。因为不需要做明确的系统调用，那会很消耗时间。更重要的是，操作系统的虚拟内存可以自动缓存内存页（memory page）。这些页是用系统内存来缓存的，所以不会消耗Java虚拟机内存堆（memory heap）。</li>
+<li>结合文件锁定来保护关键区域和控制事务原子性，那您将能了解到内存映射缓冲区如何可以被很好地利用。</li>
+</ul>
+<h3 id="channel-to-channel传输"><a href="#channel-to-channel传输" class="headerlink" title="channel-to-channel传输"></a>channel-to-channel传输</h3><ul>
+<li>FileChannel类有这两个方法。transferTo()和transferFrom()</li>
+</ul>
+<h2 id="socket通道"><a href="#socket通道" class="headerlink" title="socket通道"></a>socket通道</h2><ul>
+<li>并非所有的socket都有一个关联的通道。</li>
+</ul>
+<h3 id="非阻塞模式"><a href="#非阻塞模式" class="headerlink" title="非阻塞模式"></a>非阻塞模式</h3><ul>
+<li>Socket通道是线程安全的；任何时候都只有一个读操作和一个写操作在进行中</li>
+</ul>
+<h3 id="DatagramChannel"><a href="#DatagramChannel" class="headerlink" title="DatagramChannel"></a>DatagramChannel</h3><ul>
+<li>与面向流的的socket不同，DatagramChannel可以发送单独的数据报给不同的目的地址</li>
+<li>如果已经安装了一个安全管理器，那么它会进行权限检查。之后，每次send/receive时就不会再有安全检查了，因为来自或去到任何其他地址的包都是不允许的.</li>
+<li>下面列出了一些选择数据报socket而非流socket的理由：</li>
+</ul>
+<ol>
+<li>您的程序可以承受数据丢失或无序的数据。</li>
+<li>您希望“发射后不管”（fire and forget）而不需要知道您发送的包是否已接收。</li>
+<li>数据吞吐量比可靠性更重要。</li>
+<li>您需要同时发送数据给多个接受者（多播或者广播）。</li>
+<li>包隐喻比流隐喻更适合手边的任务。</li>
+</ol>
+<h2 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h2><ul>
+<li>Pipe类创建一对提供环回机制的Channel对象</li>
+<li>管道可以被用来仅在同一个Java虚拟机内部传输数据</li>
+<li>Pipes的另一个有用之处是可以用来辅助测试</li>
+</ul>
+<h2 id="通道工具类"><a href="#通道工具类" class="headerlink" title="通道工具类"></a>通道工具类</h2><p>channels的几种静态的工厂方法以使通道可以更加容易地同流和读写器互联</p>
+<h1 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h1><p>选择器提供选择执行已经就绪的任务的能力，这使得多元 I/O 成为可能。</p>
+<h2 id="选择器基础"><a href="#选择器基础" class="headerlink" title="选择器基础"></a>选择器基础</h2><h3 id="选择器-1"><a href="#选择器-1" class="headerlink" title="选择器"></a>选择器</h3><h4 id="selector"><a href="#selector" class="headerlink" title="selector"></a>selector</h4><p>选择器类管理着一个被注册的通道集合的信息和它们的就绪状态。通道是和选择器一起被注册的，并且使用选择器来更新通道的就绪状态。当这么做的时候，可以选择将被激发的线程挂起，直到有就绪的的通道。</p>
+<p>选择器维护了一个需要监控的通道的集合.</p>
+<h4 id="可选择通道"><a href="#可选择通道" class="headerlink" title="可选择通道"></a>可选择通道</h4><p>一个通道可以被注册到多个选择器上，但对每个选择器而言只能被注册一次</p>
+<h4 id="选择键"><a href="#选择键" class="headerlink" title="选择键"></a>选择键</h4><p>选择键封装了特定的通道与特定的选择器的注册关系。</p>
+<hr>
+<blockquote>
+<p>通道在被注册到一个选择器上之前，必须先设置为非阻塞模式（通过调用configureBlocking(false)）</p>
+</blockquote>
+<blockquote>
+<p>选择器才是提供管理功能的对象，而不是可选择通道对象。选择器对象对注册到它之上的通道执行就绪选择，并管理选择键。</p>
+</blockquote>
+<hr>
+<h3 id="建立选择器"><a href="#建立选择器" class="headerlink" title="建立选择器"></a>建立选择器</h3><ul>
+<li>您可以通过调用validOps( )方法来获取特定的通道所支持的操作集合</li>
+<li>通道不会在键被取消的时候立即注销；必在键可能被取消的情况下检查SelectionKey对象的状态。</li>
+<li>调用isRegistered( )方法来检查一个通道是否被注册到任何一个选择器上</li>
+<li>当通道关闭时，所有相关的键会自动取消</li>
+<li>当选择器关闭时，所有被注册到该选择器的通道都将被注销，并且相关的键将立即被无效化</li>
+<li>interset集合永远不会被选择器改变，但您可以通过调用interestOps()方法并传入一个新的比特掩码参数来改变它。</li>
+<li>不能直接改变键的ready集合</li>
+</ul>
+<blockquote>
+<p>如果选择键的存续时间很长，但您附加的对象不应该存在那么长时间，请记得在完成后清理附件。否则，您附加的对象将不能被垃圾回收，您将会面临内存泄漏问题。</p>
+</blockquote>
+<ul>
+<li>SelectionKey对象是线程安全的，但知道修改interest集合的操作是通过Selector对象进行同步的是很重要的</li>
+</ul>
+<h3 id="选择过程"><a href="#选择过程" class="headerlink" title="选择过程"></a>选择过程</h3><ul>
+<li>每一个Selector对象维护三个键的集</li>
+<li>在一个刚初始化的Selector对象中，这三个集合都是空的</li>
+</ul>
+<h4 id="已注册key集合"><a href="#已注册key集合" class="headerlink" title="已注册key集合"></a>已注册key集合</h4><ul>
+<li>并不是所有已注册key都有效；不能直接修改。</li>
+</ul>
+<h4 id="已选择key集合"><a href="#已选择key集合" class="headerlink" title="已选择key集合"></a>已选择key集合</h4><ul>
+<li>已注册key的子集.</li>
+<li>每个键至少已经关联一个准备操作的通道.</li>
+<li>键可以直接从这个集合中移除，但不能添加。</li>
+</ul>
+<h3 id="已取消key集合"><a href="#已取消key集合" class="headerlink" title="已取消key集合"></a>已取消key集合</h3><ul>
+<li>已注册的键的集合的子集</li>
+<li>这个集合是选择器对象的私有成员，因而无法直接访问</li>
+</ul>
+<blockquote>
+<p>选择操作是当三种形式的select()中的任意一种被调用时，由选择器执行的。不管是哪一种形式的调用，下面步骤将被执行：</p>
+<ol>
+<li>已取消的键的集合将会被检查。如果它是非空的，每个已取消的键的集合中的键将从另外两个集合中移除，并且相关的通道将被注销。这个步骤结束后，已取消的键的集合将是空的。</li>
+<li>已注册的键的集合中的键的interest集合将被检查。在这个步骤中的检查执行过后，对interest集合的改动不会影响剩余的检查过程。</li>
+</ol>
+</blockquote>
+<h3 id="停止选择过程"><a href="#停止选择过程" class="headerlink" title="停止选择过程"></a>停止选择过程</h3><h4 id="wakeup"><a href="#wakeup" class="headerlink" title="wakeup"></a>wakeup</h4><p>调用Selector对象的wakeup()方法将使得选择器上的第一个还没有返回的选择操作立即返回.</p>
+<h4 id="调用close"><a href="#调用close" class="headerlink" title="调用close"></a>调用close</h4><p>如果选择器的close( )方法被调用，那么任何一个在选择操作中阻塞的线程都将被唤醒，就像wakeup( )方法被调用了一样。与选择器相关的通道将被注销，而键将被取消。</p>
+<h4 id="调用interrupt"><a href="#调用interrupt" class="headerlink" title="调用interrupt"></a>调用interrupt</h4><p>中断一个选择器与中断一个通道是不一样的；选择器不会改变任意一个相关的通道，它只会检查它们的状态</p>
+<h3 id="管理选择键"><a href="#管理选择键" class="headerlink" title="管理选择键"></a>管理选择键</h3><h3 id="并发性"><a href="#并发性" class="headerlink" title="并发性"></a>并发性</h3><ul>
+<li>选择器对象是线程安全的，但它们包含的键集合不是。通过keys()和selectKeys()返回的键的集合是Selector对象内部的私有的Set对象集合的直接引用</li>
+<li>在多线程的场景中，如果您需要对任何一个键的集合进行更改，不管是直接更改还是其他操作带来的副作用，您都需要首先以相同的顺序，在同一对象上进行同步</li>
+</ul>
+<h3 id="异步关闭能力"><a href="#异步关闭能力" class="headerlink" title="异步关闭能力"></a>异步关闭能力</h3><ul>
+<li>任何时候都有可能关闭一个通道或者取消一个选择键</li>
+<li>关闭通道的过程不应该是一个耗时的操作</li>
+<li>当一个通道关闭时，它相关的键也就都被取消了,并不会影响正在进行的select( )。</li>
+</ul>
+<h3 id="选择过程的可扩展性"><a href="#选择过程的可扩展性" class="headerlink" title="选择过程的可扩展性"></a>选择过程的可扩展性</h3><h4 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h4><p>想要将更多的线程来为通道提供服务</p>
+<p>对所有的可选择通道使用一个选择器，并将对就绪通道的服务委托给其他线程。您只用一个线程监控通道的就绪状态并使用一个协调好的工作线程池来处理共接收到的数据。根据部署的条件，线程池的大小是可以调整的（或者它自己进行动态的调整）。对可选择通道的管理仍然是简单的，而简单的就是好的。</p>
+<h4 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h4><p>某些通道要求比其他通道更高的响应速度。</p>
+<p>可以通过使用两个选择器来解决：一个为命令连接服务，另一个为普通连接服务。但这种场景也可以使用与第一个场景十分相似的办法来解决。与将所有准备好的通道放到同一个线程池的做法不同，通道可以根据功能由不同的工作线程来处理。它们可能可以是日志线程池，命令/控制线程池，状态请求线程池。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/qrcode.jpg" alt="Alan Zhang wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号“补愚者说”，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Alan Zhang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://alanzhang.me/2016/11/26/《Java-NIO-中文版》读书笔记/" title="《Java NIO 中文版》读书笔记">http://alanzhang.me/2016/11/26/《Java-NIO-中文版》读书笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/2016/" rel="tag"># 2016</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/Nio/" rel="tag"># Nio</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/20/威斯情节/" rel="next" title="威斯情节">
+                <i class="fa fa-chevron-left"></i> 威斯情节
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/29/数据迁移-心中的痛/" rel="prev" title="数据迁移-心中的痛">
+                数据迁移-心中的痛 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzM5Ni8xOTkzNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Alan Zhang">
+            
+              <p class="site-author-name" itemprop="name">Alan Zhang</p>
+              <p class="site-description motion-element" itemprop="description">聆听内心的每一次呼吸</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">199</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/alanzhang211" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:alanzhang211@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/alanzhang211" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/alanzhang211" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#缓冲区buffer"><span class="nav-number">1.</span> <span class="nav-text">缓冲区buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区基础"><span class="nav-number">1.1.</span> <span class="nav-text">缓冲区基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-number">1.1.1.</span> <span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓冲区api"><span class="nav-number">1.1.2.</span> <span class="nav-text">缓冲区api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存取"><span class="nav-number">1.1.3.</span> <span class="nav-text">存取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#填充"><span class="nav-number">1.1.4.</span> <span class="nav-text">填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#释放"><span class="nav-number">1.1.5.</span> <span class="nav-text">释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩"><span class="nav-number">1.1.6.</span> <span class="nav-text">压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记"><span class="nav-number">1.1.7.</span> <span class="nav-text">标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较"><span class="nav-number">1.1.8.</span> <span class="nav-text">比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量移动"><span class="nav-number">1.1.9.</span> <span class="nav-text">批量移动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建缓冲区"><span class="nav-number">1.2.</span> <span class="nav-text">创建缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制缓冲区"><span class="nav-number">1.3.</span> <span class="nav-text">复制缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字节缓冲区"><span class="nav-number">1.4.</span> <span class="nav-text">字节缓冲区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通道Channel"><span class="nav-number">2.</span> <span class="nav-text">通道Channel</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#通道基础"><span class="nav-number">2.1.</span> <span class="nav-text">通道基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用通道"><span class="nav-number">2.1.1.</span> <span class="nav-text">使用通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭通道"><span class="nav-number">2.1.2.</span> <span class="nav-text">关闭通道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scatter-Gather"><span class="nav-number">2.2.</span> <span class="nav-text">Scatter/Gather</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件通道"><span class="nav-number">2.3.</span> <span class="nav-text">文件通道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#访问文件"><span class="nav-number">2.3.1.</span> <span class="nav-text">访问文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件锁"><span class="nav-number">2.3.2.</span> <span class="nav-text">文件锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存映射文件"><span class="nav-number">2.4.</span> <span class="nav-text">内存映射文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#channel-to-channel传输"><span class="nav-number">2.4.1.</span> <span class="nav-text">channel-to-channel传输</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket通道"><span class="nav-number">2.5.</span> <span class="nav-text">socket通道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#非阻塞模式"><span class="nav-number">2.5.1.</span> <span class="nav-text">非阻塞模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DatagramChannel"><span class="nav-number">2.5.2.</span> <span class="nav-text">DatagramChannel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道"><span class="nav-number">2.6.</span> <span class="nav-text">管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通道工具类"><span class="nav-number">2.7.</span> <span class="nav-text">通道工具类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选择器"><span class="nav-number">3.</span> <span class="nav-text">选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择器基础"><span class="nav-number">3.1.</span> <span class="nav-text">选择器基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选择器-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#selector"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">selector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可选择通道"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">可选择通道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选择键"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">选择键</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立选择器"><span class="nav-number">3.1.2.</span> <span class="nav-text">建立选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择过程"><span class="nav-number">3.1.3.</span> <span class="nav-text">选择过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#已注册key集合"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">已注册key集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#已选择key集合"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">已选择key集合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已取消key集合"><span class="nav-number">3.1.4.</span> <span class="nav-text">已取消key集合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#停止选择过程"><span class="nav-number">3.1.5.</span> <span class="nav-text">停止选择过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wakeup"><span class="nav-number">3.1.5.1.</span> <span class="nav-text">wakeup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用close"><span class="nav-number">3.1.5.2.</span> <span class="nav-text">调用close</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用interrupt"><span class="nav-number">3.1.5.3.</span> <span class="nav-text">调用interrupt</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理选择键"><span class="nav-number">3.1.6.</span> <span class="nav-text">管理选择键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发性"><span class="nav-number">3.1.7.</span> <span class="nav-text">并发性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步关闭能力"><span class="nav-number">3.1.8.</span> <span class="nav-text">异步关闭能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择过程的可扩展性"><span class="nav-number">3.1.9.</span> <span class="nav-text">选择过程的可扩展性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#场景1"><span class="nav-number">3.1.9.1.</span> <span class="nav-text">场景1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#场景2"><span class="nav-number">3.1.9.2.</span> <span class="nav-text">场景2</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alan Zhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("3FyxSKHmT3h8Yzt0acMtQM5e-gzGzoHsz", "tJV7duG1GgtXVsM3YcrBLhHA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Wechat,Linkedin,Douban,QQZone,Twitter,Facebook,Weibo";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

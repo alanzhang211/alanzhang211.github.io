@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="2016,java,线程,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="悟" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="百度网盘资源下载">
+<meta name="keywords" content="2016,java,线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Java多线程编程核心技术》读书笔记">
+<meta property="og:url" content="http://alanzhang.me/2016/11/10/《Java多线程编程核心技术》读书笔记/index.html">
+<meta property="og:site_name" content="悟">
+<meta property="og:description" content="百度网盘资源下载">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/2016/book/1110197774.jpg">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master//book/2016/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/clipboard.png">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard.png">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard1.png">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard2.png">
+<meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/2016/book/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AFsychronized.JPG">
+<meta property="og:updated_time" content="2019-02-26T15:14:20.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Java多线程编程核心技术》读书笔记">
+<meta name="twitter:description" content="百度网盘资源下载">
+<meta name="twitter:image" content="https://github.com/alanzhang211/blog-image/raw/master/2016/book/1110197774.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://alanzhang.me/2016/11/10/《Java多线程编程核心技术》读书笔记/">
+
+
+
+
+
+  <title>《Java多线程编程核心技术》读书笔记 | 悟</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f918b43482e1dfb005ebac268b144dbe";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">悟</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">心与心的交互</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2016/11/10/《Java多线程编程核心技术》读书笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alan Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="悟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Java多线程编程核心技术》读书笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-10T22:06:23+08:00">
+                2016-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2016/11/10/《Java多线程编程核心技术》读书笔记/" class="leancloud_visitors" data-flag-title="《Java多线程编程核心技术》读书笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.1k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://github.com/alanzhang211/blog-image/raw/master/2016/book/1110197774.jpg" alt="Java多线程编程核心技术"></p>
+<ul>
+<li><a href="http://pan.baidu.com/s/1slKqcYL" target="_blank" rel="noopener">百度网盘资源下载</a></li>
+</ul>
+<a id="more"></a>
+<h1 id="停止线程"><a href="#停止线程" class="headerlink" title="停止线程"></a>停止线程</h1><p><img src="https://github.com/alanzhang211/blog-image/raw/master//book/2016/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/clipboard.png" alt></p>
+<p>如果在for循环中interrupted，for循环后续的语句还会执行，线程并非停止，可以抛出异常。</p>
+<p><img src="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard.png" alt></p>
+<p>如果在for循环中interrupted，for循环后续的语句还会执行，线程并非停止，可以抛出异常。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard1.png" alt></p>
+<p><img src="https://github.com/alanzhang211/blog-image/raw/master/book/2016/10clipboard2.png" alt></p>
+<h3 id="在沉睡中停止"><a href="#在沉睡中停止" class="headerlink" title="在沉睡中停止"></a>在沉睡中停止</h3><h4 id="如果线程在sleep下停止会怎样？"><a href="#如果线程在sleep下停止会怎样？" class="headerlink" title="如果线程在sleep下停止会怎样？"></a>如果线程在sleep下停止会怎样？</h4><p>sleep下停止线程，会清楚停止状态值。</p>
+<h3 id="stop暴力停止"><a href="#stop暴力停止" class="headerlink" title="stop暴力停止"></a>stop暴力停止</h3><p>stop会抛出ThreadDeath异常；次异常不需要显示的补获。<br>此方法已被作废；如果使用会导致一些清理工作没能完成，导致数据不一致问题。</p>
+<h3 id="使用return停止线程"><a href="#使用return停止线程" class="headerlink" title="使用return停止线程"></a>使用return停止线程</h3><p>[图片]</p>
+<p><strong>建议使用抛出异常的方式实现线程停止，这样在catch块中可以向上抛</strong></p>
+<h3 id="暂停线程"><a href="#暂停线程" class="headerlink" title="暂停线程"></a>暂停线程</h3><p>java使用suspend暂停线程，使用resume恢复</p>
+<h4 id="suspend与resume的缺陷"><a href="#suspend与resume的缺陷" class="headerlink" title="suspend与resume的缺陷"></a>suspend与resume的缺陷</h4><ul>
+<li>独占</li>
+<li>不同步</li>
+</ul>
+<h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>放弃当前cpu资源，给其他线程。但放弃的时间不确定。</p>
+<h3 id="线程的优先级"><a href="#线程的优先级" class="headerlink" title="线程的优先级"></a>线程的优先级</h3><p>设置线程优先级有助于“线程规划器”决定下一个执行线程。</p>
+<p>使用setPriority</p>
+<p>jdk中优先级分为1-10个等级。</p>
+<h4 id="优先级的继承特性"><a href="#优先级的继承特性" class="headerlink" title="优先级的继承特性"></a>优先级的继承特性</h4><p>如：A线程启动B线程，则B的优先级和A的相同。</p>
+<h4 id="优先级具有规则性"><a href="#优先级具有规则性" class="headerlink" title="优先级具有规则性"></a>优先级具有规则性</h4><ul>
+<li>高优先级的总是<strong>大部分</strong>先执行。</li>
+<li>线程谁先执行完和代码调用无关。</li>
+</ul>
+<h4 id="优先级具有随机性"><a href="#优先级具有随机性" class="headerlink" title="优先级具有随机性"></a>优先级具有随机性</h4><ul>
+<li>优先级高的不一定每次都先执行完。</li>
+</ul>
+<h4 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h4><ul>
+<li>当进程中不存在非守护线程了，守护线程自动销毁。<strong>典型的如垃圾回收线程</strong></li>
+<li>作用：为其他线程的运行提供便利服务</li>
+</ul>
+<hr>
+<h1 id="对象及变量的并发访问"><a href="#对象及变量的并发访问" class="headerlink" title="对象及变量的并发访问"></a>对象及变量的并发访问</h1><h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><h3 id="方法内的变量是线程安全的"><a href="#方法内的变量是线程安全的" class="headerlink" title="方法内的变量是线程安全的"></a>方法内的变量是线程安全的</h3><ul>
+<li>方法内部变量时私有的</li>
+</ul>
+<h3 id="实例变量是非线程安全的"><a href="#实例变量是非线程安全的" class="headerlink" title="实例变量是非线程安全的"></a>实例变量是非线程安全的</h3><ul>
+<li>两个线程访问<strong>同一个对象</strong>的同步方法，一定是线程安全的。</li>
+</ul>
+<h3 id="synchronized方法和锁对象"><a href="#synchronized方法和锁对象" class="headerlink" title="synchronized方法和锁对象"></a>synchronized方法和锁对象</h3><ul>
+<li>访问锁对象的被synchronized修改的的实例方法；是同步的，需要排队访问。</li>
+</ul>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><h3 id="synchronized锁重入"><a href="#synchronized锁重入" class="headerlink" title="synchronized锁重入"></a>synchronized锁重入</h3><ul>
+<li>在synchronized的方法或块内部调用synchronized方法或块，jing将可以得到锁。</li>
+<li>可重入锁：自己可以再次获得自己的内部锁</li>
+</ul>
+<h3 id="出现异常，锁自动释放"><a href="#出现异常，锁自动释放" class="headerlink" title="出现异常，锁自动释放"></a>出现异常，锁自动释放</h3><h3 id="同步不具有继承性"><a href="#同步不具有继承性" class="headerlink" title="同步不具有继承性"></a>同步不具有继承性</h3><hr>
+<h2 id="synchronized同步语句块"><a href="#synchronized同步语句块" class="headerlink" title="synchronized同步语句块"></a>synchronized同步语句块</h2><h3 id="synchronized代码块间的同步性"><a href="#synchronized代码块间的同步性" class="headerlink" title="synchronized代码块间的同步性"></a>synchronized代码块间的同步性</h3><ul>
+<li>当一个线程访问object的一个synchronized(this)同步快时，其他线程对同一个object的其他synchronized(this)同步块的访问是阻塞的，说明，synchronized使用的“对象解释器”只有一个。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2016/book/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AFsychronized.JPG" alt="image"></li>
+</ul>
+<h3 id="任意对象作为对象监视器"><a href="#任意对象作为对象监视器" class="headerlink" title="任意对象作为对象监视器"></a>任意对象作为对象监视器</h3><ul>
+<li>java 支持对“任意对象”作为监视器，任意对象大多数是实例变量及方法参数，使用格式synchronized(非this对象)。</li>
+<li>多个线程持有同一个对象的“对象监视器”，只能有一个线程可以访问。</li>
+<li>捕鱼其他锁this争抢this锁，可提高效率。</li>
+<li>非this监视器必须是同一个对象，如：实例变量。（局部变量不满足）</li>
+</ul>
+<h3 id="静态synchronized方法与synchronized-class-代码块。"><a href="#静态synchronized方法与synchronized-class-代码块。" class="headerlink" title="静态synchronized方法与synchronized(class)代码块。"></a>静态synchronized方法与synchronized(class)代码块。</h3><ul>
+<li>同步静态方法，是对Class对象持有锁。</li>
+<li>同步class对象和同步静态方法作用一样。</li>
+</ul>
+<h3 id="数据类型String的常量池特性"><a href="#数据类型String的常量池特性" class="headerlink" title="数据类型String的常量池特性"></a>数据类型String的常量池特性</h3><ul>
+<li>jvm具有String常量池的缓存功能。</li>
+<li>不使用String作为锁对象。</li>
+</ul>
+<h3 id="同步synchronized方法无限等待与解决"><a href="#同步synchronized方法无限等待与解决" class="headerlink" title="同步synchronized方法无限等待与解决"></a>同步synchronized方法无限等待与解决</h3><ul>
+<li>使用同步快处理（synchronized(Object)）</li>
+</ul>
+<h3 id="多线程的死锁"><a href="#多线程的死锁" class="headerlink" title="多线程的死锁"></a>多线程的死锁</h3><h3 id="内置类和静态内置类"><a href="#内置类和静态内置类" class="headerlink" title="内置类和静态内置类"></a>内置类和静态内置类</h3><h3 id="锁对象的改变"><a href="#锁对象的改变" class="headerlink" title="锁对象的改变"></a>锁对象的改变</h3><ul>
+<li>持有相同锁对象，线程同步。</li>
+<li>只要对象不变，对象属性改变，依旧是同步的。</li>
+</ul>
+<hr>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><ul>
+<li>作用：使变量在多个线程间可见。</li>
+</ul>
+<h3 id="关键字volatile与死循环"><a href="#关键字volatile与死循环" class="headerlink" title="关键字volatile与死循环"></a>关键字volatile与死循环</h3><ul>
+<li>从线程公共堆栈中获取变量值，而不是线程的私有栈。</li>
+<li>volatile不支持原子操作。</li>
+</ul>
+<h3 id="synchronized与volatile对比"><a href="#synchronized与volatile对比" class="headerlink" title="synchronized与volatile对比"></a>synchronized与volatile对比</h3><ul>
+<li>volatile更加轻量级，性能比synchronized好。</li>
+<li>volatile只能修饰变量，synchronized可以修饰方法，以及代码块。</li>
+<li>多线程访问volatile不会阻塞。</li>
+<li>volatile保证数据的可见性，不能保证原子性。</li>
+<li>synchronized可以保证可见性和原子性。</li>
+<li>volatile解决的是多线程变量的可见性；synchronized解决的是多线程资源的可见性。</li>
+<li>线程安全包括：可见性和原子性。</li>
+</ul>
+<h3 id="volatile非原子特性"><a href="#volatile非原子特性" class="headerlink" title="volatile非原子特性"></a>volatile非原子特性</h3><ul>
+<li>使用synchronized进行同步</li>
+<li>使用AtomicInteger可进行原子操作。</li>
+</ul>
+<h3 id="synchronized代码块有volatile同步的功能"><a href="#synchronized代码块有volatile同步的功能" class="headerlink" title="synchronized代码块有volatile同步的功能"></a>synchronized代码块有volatile同步的功能</h3><ul>
+<li>互斥性和可见性</li>
+</ul>
+<hr>
+<h1 id="线程间通信"><a href="#线程间通信" class="headerlink" title="线程间通信"></a>线程间通信</h1><h2 id="等待-通知机制（wait-notify）"><a href="#等待-通知机制（wait-notify）" class="headerlink" title="等待/通知机制（wait/notify）"></a>等待/通知机制（wait/notify）</h2><h3 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h3><ul>
+<li>wait是object对象的方法</li>
+<li>在wait之前必须获取对象级别的锁，即只能在同步方法或同步块中调用wait方法</li>
+<li>调用wait时没有持有适当的锁，则抛出运行时异常illegalMonitorStateException，无需使用try…catch…捕获。</li>
+</ul>
+<h3 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h3><ul>
+<li>notify是Object对象的方法。</li>
+<li>必须获取对象级别的锁，即只能在同步方法或同步块中调用</li>
+<li>在执行notify后，当前线程不会立即释放该对象的锁，wait的也不会立刻得到该对象锁。</li>
+<li>执行notify的线程执行完，即退出synchronized代码块，才会释放锁，呈wait的线程才能得到对象锁。</li>
+<li>第一个获得notify的线程执行完毕，释放对象锁，如果没有发出notify或notifyAll,其他线程也不能获取到对象锁。</li>
+</ul>
+<ul>
+<li><strong>方法wait被执行后，所被释放；执行完notify后，锁却不被释放；必须执行完notify所在的synchronized代码块才能释放。</strong></li>
+<li><strong>执行完同步代码块就会释放锁对象。</strong></li>
+<li><strong>在执行同步代码块的过程中，遇到异常而导致线程终止，会释放锁。</strong></li>
+<li><strong>在执行同步代码块中执行wait，会释放锁。</strong></li>
+</ul>
+<h3 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h3><ul>
+<li>唤醒所有等待线程</li>
+</ul>
+<h2 id="生产者-amp-消费者"><a href="#生产者-amp-消费者" class="headerlink" title="生产者&amp;消费者"></a>生产者&amp;消费者</h2><p>==使用notifyAll可以避免程序假死==</p>
+<h3 id="通过管道进行线程间通信"><a href="#通过管道进行线程间通信" class="headerlink" title="通过管道进行线程间通信"></a>通过管道进行线程间通信</h3><h4 id="pipeStream用于不同线程之间传递数据"><a href="#pipeStream用于不同线程之间传递数据" class="headerlink" title="pipeStream用于不同线程之间传递数据"></a>pipeStream用于不同线程之间传递数据</h4><h2 id="join"><a href="#join" class="headerlink" title="join"></a>join</h2><p>等待线程对象销毁</p>
+<ul>
+<li>join具有使线程运行的作用，有些类似同步的效果。</li>
+<li>join在内部使用的是wait方法进行等待；synchronized使用“对象监视器”原理做同步。</li>
+</ul>
+<h3 id="join与异常"><a href="#join与异常" class="headerlink" title="join与异常"></a>join与异常</h3><ul>
+<li>join与interrupt方法如果彼此相遇，会出现异常。</li>
+</ul>
+<h3 id="join-long-与sleep-long-区别"><a href="#join-long-与sleep-long-区别" class="headerlink" title="join(long)与sleep(long)区别"></a>join(long)与sleep(long)区别</h3><ul>
+<li>join释放锁</li>
+</ul>
+<hr>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><p><em>变量共享可以使用public static变量的形式，所有线程都使用同一个public static变量。如果实现每个线程都有自己的共享变量，可以使用ThreadLocal。</em></p>
+<p><em>ThreadLocal可以比喻全局存放数据的盒子；盒子可以存储每个线程的私有数据。</em></p>
+<h3 id="方法get与null"><a href="#方法get与null" class="headerlink" title="方法get与null"></a>方法get与null</h3><ul>
+<li>ThreadLocal解决的是不同线程之间的隔离性。</li>
+</ul>
+<h3 id="InheritableThreadLocal"><a href="#InheritableThreadLocal" class="headerlink" title="InheritableThreadLocal"></a>InheritableThreadLocal</h3><ul>
+<li>可以在子线程中获取主线程中取值。</li>
+<li><strong>如果主线程将值改变，则子线程依旧拿到的是旧值。</strong></li>
+</ul>
+<hr>
+<h1 id="Lock"><a href="#Lock" class="headerlink" title="Lock"></a>Lock</h1><h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><ul>
+<li>lock\unclock</li>
+</ul>
+<h3 id="Condition实现等待-通知"><a href="#Condition实现等待-通知" class="headerlink" title="Condition实现等待/通知"></a>Condition实现等待/通知</h3><ul>
+<li>一个lock可以创建多个Condition对象。</li>
+<li>notify/notifyAll 选择线程是随机的；Condition可以选择性的通知。</li>
+<li>必须在condition.await()之前调用lock.lock()</li>
+<li>signal/signalAll</li>
+</ul>
+<h3 id="公平锁-非公平锁"><a href="#公平锁-非公平锁" class="headerlink" title="公平锁/非公平锁"></a>公平锁/非公平锁</h3><ul>
+<li>公平锁：按照线程加锁的顺序来分配</li>
+<li>非公平锁：抢占机制</li>
+</ul>
+<h2 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2><ul>
+<li>读锁共享</li>
+<li>写锁互斥</li>
+<li>读写互斥</li>
+</ul>
+<h1 id="定时器Timer"><a href="#定时器Timer" class="headerlink" title="定时器Timer"></a>定时器Timer</h1><ul>
+<li>设置计划任务</li>
+<li>执行任务的类TimerTask</li>
+</ul>
+<h2 id="Timer的使用"><a href="#Timer的使用" class="headerlink" title="Timer的使用"></a>Timer的使用</h2><h3 id="schedule"><a href="#schedule" class="headerlink" title="schedule"></a>schedule</h3><ul>
+<li>Timer.schedule 启动一个新线程。如果没有设置Timer为守护线程，则则一直运行。</li>
+<li>执行时间早于当前时间，则任务立刻执行。</li>
+<li>timer中允许多个task。以队列的方式执行，可能和预期的不一致。</li>
+</ul>
+<h3 id="TimerTask"><a href="#TimerTask" class="headerlink" title="TimerTask"></a>TimerTask</h3><ul>
+<li>cancel将自身从队列中移除，其他任务不受影响。</li>
+<li>timer的cancel是将队列全部清除。</li>
+<li>Timer类中的cancel类有可能没有抢占到queue的锁，TimerTask类中的任务继续执行。</li>
+</ul>
+<h1 id="单例模式与多线程"><a href="#单例模式与多线程" class="headerlink" title="单例模式与多线程"></a>单例模式与多线程</h1><h2 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h2><p>多线程下，延迟加载时错误的单例模式</p>
+<p><strong>解决方法</strong></p>
+<ul>
+<li>synchronized关键字，对getInstance方法加锁。</li>
+<li>使用DCL双检查锁机制。</li>
+</ul>
+<h2 id="使用静态内之类实现单例模式"><a href="#使用静态内之类实现单例模式" class="headerlink" title="使用静态内之类实现单例模式"></a>使用静态内之类实现单例模式</h2><h2 id="序列化与反序列化"><a href="#序列化与反序列化" class="headerlink" title="序列化与反序列化"></a>序列化与反序列化</h2><h2 id="使用static静态代码块实现单例"><a href="#使用static静态代码块实现单例" class="headerlink" title="使用static静态代码块实现单例"></a>使用static静态代码块实现单例</h2><ul>
+<li>static中的代码在实用类时已经执行。</li>
+</ul>
+<h2 id="使用enum枚举类只想单例模式"><a href="#使用enum枚举类只想单例模式" class="headerlink" title="使用enum枚举类只想单例模式"></a>使用enum枚举类只想单例模式</h2><ul>
+<li>在使用枚举类时，构造方法自动被调用。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+      <div>
+        <div id="wechat_subscriber" style="display: block; padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/images/qrcode.jpg" alt="Alan Zhang wechat" style="width: 200px; max-width: 100%;">
+    <div>欢迎您扫一扫上面的微信公众号“补愚者说”，订阅我的博客！</div>
+</div>
+
+      </div>
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    Alan Zhang
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://alanzhang.me/2016/11/10/《Java多线程编程核心技术》读书笔记/" title="《Java多线程编程核心技术》读书笔记">http://alanzhang.me/2016/11/10/《Java多线程编程核心技术》读书笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/2016/" rel="tag"># 2016</a>
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/线程/" rel="tag"># 线程</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/30/2016-Salomon城市越野赛杭州站38期小结/" rel="next" title="2016 Salomon城市越野赛杭州站38期小结">
+                <i class="fa fa-chevron-left"></i> 2016 Salomon城市越野赛杭州站38期小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/17/《Redis入门指南》读书笔记/" rel="prev" title="《Redis入门指南》读书笔记">
+                《Redis入门指南》读书笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MzM5Ni8xOTkzNw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="Alan Zhang">
+            
+              <p class="site-author-name" itemprop="name">Alan Zhang</p>
+              <p class="site-description motion-element" itemprop="description">聆听内心的每一次呼吸</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">199</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/alanzhang211" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:alanzhang211@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.facebook.com/alanzhang211" target="_blank" title="FB Page">
+                      
+                        <i class="fa fa-fw fa-facebook"></i>FB Page</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://instagram.com/alanzhang211" target="_blank" title="Instagram">
+                      
+                        <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#停止线程"><span class="nav-number">1.</span> <span class="nav-text">停止线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在沉睡中停止"><span class="nav-number">1.0.1.</span> <span class="nav-text">在沉睡中停止</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果线程在sleep下停止会怎样？"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">如果线程在sleep下停止会怎样？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stop暴力停止"><span class="nav-number">1.0.2.</span> <span class="nav-text">stop暴力停止</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用return停止线程"><span class="nav-number">1.0.3.</span> <span class="nav-text">使用return停止线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#暂停线程"><span class="nav-number">1.0.4.</span> <span class="nav-text">暂停线程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#suspend与resume的缺陷"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">suspend与resume的缺陷</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yield"><span class="nav-number">1.0.5.</span> <span class="nav-text">yield</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#作用"><span class="nav-number">1.0.5.1.</span> <span class="nav-text">作用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程的优先级"><span class="nav-number">1.0.6.</span> <span class="nav-text">线程的优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#优先级的继承特性"><span class="nav-number">1.0.6.1.</span> <span class="nav-text">优先级的继承特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优先级具有规则性"><span class="nav-number">1.0.6.2.</span> <span class="nav-text">优先级具有规则性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优先级具有随机性"><span class="nav-number">1.0.6.3.</span> <span class="nav-text">优先级具有随机性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#守护线程"><span class="nav-number">1.0.6.4.</span> <span class="nav-text">守护线程</span></a></li></ol></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#对象及变量的并发访问"><span class="nav-number">2.</span> <span class="nav-text">对象及变量的并发访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">2.1.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法内的变量是线程安全的"><span class="nav-number">2.1.1.</span> <span class="nav-text">方法内的变量是线程安全的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例变量是非线程安全的"><span class="nav-number">2.1.2.</span> <span class="nav-text">实例变量是非线程安全的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized方法和锁对象"><span class="nav-number">2.1.3.</span> <span class="nav-text">synchronized方法和锁对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脏读"><span class="nav-number">2.1.4.</span> <span class="nav-text">脏读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized锁重入"><span class="nav-number">2.1.5.</span> <span class="nav-text">synchronized锁重入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#出现异常，锁自动释放"><span class="nav-number">2.1.6.</span> <span class="nav-text">出现异常，锁自动释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步不具有继承性"><span class="nav-number">2.1.7.</span> <span class="nav-text">同步不具有继承性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized同步语句块"><span class="nav-number">2.2.</span> <span class="nav-text">synchronized同步语句块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized代码块间的同步性"><span class="nav-number">2.2.1.</span> <span class="nav-text">synchronized代码块间的同步性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任意对象作为对象监视器"><span class="nav-number">2.2.2.</span> <span class="nav-text">任意对象作为对象监视器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态synchronized方法与synchronized-class-代码块。"><span class="nav-number">2.2.3.</span> <span class="nav-text">静态synchronized方法与synchronized(class)代码块。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型String的常量池特性"><span class="nav-number">2.2.4.</span> <span class="nav-text">数据类型String的常量池特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步synchronized方法无限等待与解决"><span class="nav-number">2.2.5.</span> <span class="nav-text">同步synchronized方法无限等待与解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程的死锁"><span class="nav-number">2.2.6.</span> <span class="nav-text">多线程的死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置类和静态内置类"><span class="nav-number">2.2.7.</span> <span class="nav-text">内置类和静态内置类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁对象的改变"><span class="nav-number">2.2.8.</span> <span class="nav-text">锁对象的改变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-number">2.3.</span> <span class="nav-text">volatile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字volatile与死循环"><span class="nav-number">2.3.1.</span> <span class="nav-text">关键字volatile与死循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized与volatile对比"><span class="nav-number">2.3.2.</span> <span class="nav-text">synchronized与volatile对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile非原子特性"><span class="nav-number">2.3.3.</span> <span class="nav-text">volatile非原子特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized代码块有volatile同步的功能"><span class="nav-number">2.3.4.</span> <span class="nav-text">synchronized代码块有volatile同步的功能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程间通信"><span class="nav-number">3.</span> <span class="nav-text">线程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#等待-通知机制（wait-notify）"><span class="nav-number">3.1.</span> <span class="nav-text">等待/通知机制（wait/notify）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#wait"><span class="nav-number">3.1.1.</span> <span class="nav-text">wait</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#notify"><span class="nav-number">3.1.2.</span> <span class="nav-text">notify</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#notifyAll"><span class="nav-number">3.1.3.</span> <span class="nav-text">notifyAll</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产者-amp-消费者"><span class="nav-number">3.2.</span> <span class="nav-text">生产者&amp;消费者</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过管道进行线程间通信"><span class="nav-number">3.2.1.</span> <span class="nav-text">通过管道进行线程间通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pipeStream用于不同线程之间传递数据"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">pipeStream用于不同线程之间传递数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#join"><span class="nav-number">3.3.</span> <span class="nav-text">join</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#join与异常"><span class="nav-number">3.3.1.</span> <span class="nav-text">join与异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#join-long-与sleep-long-区别"><span class="nav-number">3.3.2.</span> <span class="nav-text">join(long)与sleep(long)区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">3.4.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法get与null"><span class="nav-number">3.4.1.</span> <span class="nav-text">方法get与null</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#InheritableThreadLocal"><span class="nav-number">3.4.2.</span> <span class="nav-text">InheritableThreadLocal</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lock"><span class="nav-number">4.</span> <span class="nav-text">Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock"><span class="nav-number">4.1.</span> <span class="nav-text">ReentrantLock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition实现等待-通知"><span class="nav-number">4.1.1.</span> <span class="nav-text">Condition实现等待/通知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#公平锁-非公平锁"><span class="nav-number">4.1.2.</span> <span class="nav-text">公平锁/非公平锁</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantReadWriteLock"><span class="nav-number">4.2.</span> <span class="nav-text">ReentrantReadWriteLock</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定时器Timer"><span class="nav-number">5.</span> <span class="nav-text">定时器Timer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Timer的使用"><span class="nav-number">5.1.</span> <span class="nav-text">Timer的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#schedule"><span class="nav-number">5.1.1.</span> <span class="nav-text">schedule</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TimerTask"><span class="nav-number">5.1.2.</span> <span class="nav-text">TimerTask</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单例模式与多线程"><span class="nav-number">6.</span> <span class="nav-text">单例模式与多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#延迟加载"><span class="nav-number">6.1.</span> <span class="nav-text">延迟加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用静态内之类实现单例模式"><span class="nav-number">6.2.</span> <span class="nav-text">使用静态内之类实现单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#序列化与反序列化"><span class="nav-number">6.3.</span> <span class="nav-text">序列化与反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用static静态代码块实现单例"><span class="nav-number">6.4.</span> <span class="nav-text">使用static静态代码块实现单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用enum枚举类只想单例模式"><span class="nav-number">6.5.</span> <span class="nav-text">使用enum枚举类只想单例模式</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Alan Zhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("3FyxSKHmT3h8Yzt0acMtQM5e-gzGzoHsz", "tJV7duG1GgtXVsM3YcrBLhHA");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Wechat,Linkedin,Douban,QQZone,Twitter,Facebook,Weibo";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
