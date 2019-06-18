@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2019-04-21T07:34:06.089Z</updated>
+  <updated>2019-06-18T18:00:47.824Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>聊聊数据治理</title>
+    <link href="http://alanzhang.me/2019/06/16/%E8%81%8A%E8%81%8A%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/"/>
+    <id>http://alanzhang.me/2019/06/16/聊聊数据治理/</id>
+    <published>2019-06-16T08:20:03.000Z</published>
+    <updated>2019-06-18T18:00:47.824Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近几个月，公司人员变动挺大的。可能每年的这个时候，每家公司都差不多吧。上半年的4-5月份，下半年的8-9月份。（这里只是泛指，自己的2次跳槽都发生在这个区间）。自己所处的数据部，也逐渐有部分员工流失。人员变更，带来了组织上的微调整。就在6月初，tl也提交了辞职申请。这里不好对他人做过多的议论。不过，tl给了我不少的职场意见。</p><p>自己从事数据相关职位，算算差不多3年了吧（从2016.6-至今）。感觉到自己似乎还是个吸水量很足的海绵。从上家公司初次接触数据平台，然后部门整个团队也是在摸索中不断构建数据产品组件（调度、元数据、数据开发、数据交换、可视化报表等。要说数据报表，起初是从很早之前fine report开始接触一些报表类处理，然后致使我去做数据这块的东西）。</p><p>当时，整个团队缺少点资深的数据技术或者数据产品。所以，做出来的有时候就是拍脑袋的事，然后过了不久，就重新构建，或者推到重来。</p><p>这似乎可以看作是数据平台建设的第一个阶段：跑起来再说。第二家，也就是目前的公司。算是在第二阶段：统一化、规范化。至于第三阶段：服务化，统一的数据中台。目前还没到吧。<br><em>（以上3个阶段不是权威概念，只是我个人的理解，然后给了个词表述）</em></p><a id="more"></a><p>回来说说本文的主题<strong>数据治理。</strong></p><p>前段时间，处理公司的集群优化。处于中期公司都会面临的一些问题，对于集群治理，数据质量等。不管是存储的治理，还是计算资源的治理，应该都是数据治理的范畴。</p><p>然后，不久前看了一本关于数据管理的书籍《DAMA-DMBOK》。一本定义一套数据管理原则的书籍。其中，讲述了很多概念，包括数据管理，数据治理，以及数据道德的东西。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/06/data.png" alt="大纲"></p><p>有兴趣的同学可以看一看，比较厚的书籍。在线电子书地址：<a href="https://learning.oreilly.com/library/view/dama-dmbok-data-management/9781634622479/" target="_blank" rel="noopener">https://learning.oreilly.com/library/view/dama-dmbok-data-management/9781634622479/</a></p><p> <em>注册账户，免费10天适用</em></p><p>本书，就是以数据治理为中心，逐步展开讲解。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/06/data1.png" alt="治理"><br><code>数据治理</code>是在<code>数据管理</code>过程中，对其的监控和控制。伴随着就有<code>数据质量</code>来衡量和评估。这三个过程是相互依赖，相互补充的。</p><p><strong>那么，怎么才能做好数据治理呢？</strong></p><p>在我经历的过程中，<code>数据治理</code>这个说简单也简单，说复杂也复杂。简单来说，数据治理么，就是对数据整个生命周期进行管理，包括：数据的产出，数据的加工，数据应用，数据下线，数据删除等过程。</p><p>复杂的说，其中就会牵扯到很多数据，不单单指数据的生命周期过程。可能还会延伸出一些其他元数据的处理。如：表治理-涉及到存储管理；yarn任务治理-涉及到集群计算资源的治理。进而衍生出后面的存储账单、计算账单等。</p><p>说到账单，第一感受就是要<strong>收费</strong>了。收费的目的就是为了给用户一种压力，让用户知道，你在跑任务，存储数据的时候是在花钱的。给用户这种意识，就会遏制一些资源浪费的情况。比如：一些僵尸表（近N天无访问），无用表（任务业务已经下线），过期表（数据生命周期已经过期），像这些存储的数据，是可以进行回收销毁的。再比如：一些在yarn上跑的大车任务（耗时较长，占用vcore过多，可以抽象出一种计算单元的概念），还有一些输入表和输出表数据无变化或变化不大的etl过程，这些都是需要治理的任务。</p><p>前几天，和朋友聊这块的治理。真的，要想治理好。不单单在平台底层方面把数据做好（各种监控数据，监控指标）。同样，也需要数据委员会（这里泛指公司领导层）的支持，并推动各级实施。</p><p>然后，可能会引入一些类似<code>健康分</code>的概念。当你的数据在某种统一规则下，不满足。就会扣除相应的分数。当达到一定阀值，就会限制任务使用资源或直接遏制任务运行。这就迫使用户去提高健康分。从而向集群争取更多的资源。</p><p>当然，这种资源也是不能无休止的申请。那么，前面说的账单就起作用了。这个可以以收费的方式督促用户节约资源。</p><p>目前，公司也一直在做这块的东西。但是持续了很久，还是没能很好的落地实施。为什么？这个确实要很好地反思。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">就目前观察来看，有以下几方面：</span><br><span class="line">1. 底层数据的准确性有待提高。迫使，实施者存在疑虑，无法很好的推广。</span><br><span class="line">2. 流程上没有打通，没有和平台进行融合。</span><br><span class="line">3. 对用户透明，用户无感知这些资源的消耗带来的不足。致使资源的滥用。</span><br><span class="line">4. 资源管控力度不够。</span><br><span class="line">5. 缺乏有效的治理工具，比较零散，不易做成闭环。</span><br></pre></td></tr></table></figure><p>最近，在处理公司这块。发现了上面一些问题。感受到，治理这块真的是个难啃的<code>骨头</code>。每天大数据群里都会有类似于“任务跑不动了”、“数据查不出来”等。</p><p>所以，第一步就是将计算、存储资源如何很好的反馈给用户。接着就是，怎么推动用户去调整，集群去优化。然后，就要有相关的反馈机制（如：优化跟踪等）。进而可以持续地优化。</p><hr><p>大半夜写这些，也是想抒发下自己的一些感慨。同时，也是梳理一下做了什么，需要做什么，怎么去做。虽然，不够细致，但是也是自我梳理的过程。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近几个月，公司人员变动挺大的。可能每年的这个时候，每家公司都差不多吧。上半年的4-5月份，下半年的8-9月份。（这里只是泛指，自己的2次跳槽都发生在这个区间）。自己所处的数据部，也逐渐有部分员工流失。人员变更，带来了组织上的微调整。就在6月初，tl也提交了辞职申请。这里不好对他人做过多的议论。不过，tl给了我不少的职场意见。&lt;/p&gt;
+&lt;p&gt;自己从事数据相关职位，算算差不多3年了吧（从2016.6-至今）。感觉到自己似乎还是个吸水量很足的海绵。从上家公司初次接触数据平台，然后部门整个团队也是在摸索中不断构建数据产品组件（调度、元数据、数据开发、数据交换、可视化报表等。要说数据报表，起初是从很早之前fine report开始接触一些报表类处理，然后致使我去做数据这块的东西）。&lt;/p&gt;
+&lt;p&gt;当时，整个团队缺少点资深的数据技术或者数据产品。所以，做出来的有时候就是拍脑袋的事，然后过了不久，就重新构建，或者推到重来。&lt;/p&gt;
+&lt;p&gt;这似乎可以看作是数据平台建设的第一个阶段：跑起来再说。第二家，也就是目前的公司。算是在第二阶段：统一化、规范化。至于第三阶段：服务化，统一的数据中台。目前还没到吧。&lt;br&gt;&lt;em&gt;（以上3个阶段不是权威概念，只是我个人的理解，然后给了个词表述）&lt;/em&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="数据治理" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>突然想写点什么</title>
@@ -516,32 +543,6 @@
     
       &lt;h2 id=&quot;尾篇&quot;&gt;&lt;a href=&quot;#尾篇&quot; class=&quot;headerlink&quot; title=&quot;尾篇&quot;&gt;&lt;/a&gt;尾篇&lt;/h2&gt;&lt;p&gt;泰国第8天，上午从芭提雅汽车站坐NCA回到曼谷。然后出租车入住酒店，稍作调整，准备最后的狂欢。&lt;/p&gt;
 &lt;h2 id=&quot;告别曼谷&quot;&gt;&lt;a href=&quot;#告别曼谷&quot; class=&quot;headerlink&quot; title=&quot;告别曼谷&quot;&gt;&lt;/a&gt;告别曼谷&lt;/h2&gt;&lt;p&gt;酒店稍作休息，和在泰国的朋友约好在Terminal 21见面。之后就是去World Central买之前看好的东西。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="行万里路" scheme="http://alanzhang.me/categories/%E8%A1%8C%E4%B8%87%E9%87%8C%E8%B7%AF/"/>
-    
-    
-      <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
-    
-      <category term="行万里路" scheme="http://alanzhang.me/tags/%E8%A1%8C%E4%B8%87%E9%87%8C%E8%B7%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>泰囧-芭提雅</title>
-    <link href="http://alanzhang.me/2017/10/29/%E6%B3%B0%E5%9B%A7-%E8%8A%AD%E6%8F%90%E9%9B%85/"/>
-    <id>http://alanzhang.me/2017/10/29/泰囧-芭提雅/</id>
-    <published>2017-10-29T10:20:47.000Z</published>
-    <updated>2019-02-26T15:14:20.408Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="芭提雅篇"><a href="#芭提雅篇" class="headerlink" title="芭提雅篇"></a>芭提雅篇</h1><p><strong>芭提雅（Pattaya），是中南半岛南端的泰国一处著名海景度假胜地。</strong></p><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>芭提雅作为十一最后的一个旅游城市，停留2天。主要目的，看人妖秀。</p><p><em>标星的是收藏地点</em><br><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E8%8A%AD%E6%8F%90%E9%9B%85%E5%9C%B0%E5%9B%BE.jpg" alt="地图"></p><a id="more"></a><h1 id="DAY1"><a href="#DAY1" class="headerlink" title="DAY1"></a>DAY1</h1><p>接上文，清迈篇。第二天乘坐飞机到曼谷，然后NCA去芭提雅，到芭提雅大概下午3点。然后打车去酒店办理入住。</p><p><strong>芭提雅的出租车巨坑无比，从来不打表。而且，要价也比较坑。上车之前一定要先协商好价格。超过300都要谨慎了，有被宰的嫌疑。</strong></p><h2 id="海滩餐厅"><a href="#海滩餐厅" class="headerlink" title="海滩餐厅"></a>海滩餐厅</h2><p>入住酒店后，选择了一家海边餐厅，边就餐边看日落。海鲜，贝类，吃的想吐。最后，等着夜色降临，看了看芭提雅的夜景。然后回到酒店休息，太累了。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E6%B5%B7%E8%BE%B9%E9%A4%90%E5%8E%85.jpg" alt></p><h1 id="DAY2"><a href="#DAY2" class="headerlink" title="DAY2"></a>DAY2</h1><p>上午去了芭提雅海滩，天气比较热。准备不充分，没有带泳具，海上活动也没参加。这里可以乘船去周边的岛屿。时间太紧，没有规划路线。于是，就在海滩周边逛了逛，天气比较热。芭提雅步行街就在附近。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E8%8A%AD%E6%8F%90%E9%9B%85%E6%B5%B7.jpg" alt></p><h2 id="Walking-Street"><a href="#Walking-Street" class="headerlink" title="Walking Street"></a>Walking Street</h2><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E6%AD%A5%E8%A1%8C%E8%A1%97.jpg" alt></p><p>这里，白天很安静，“店铺”都关门。挺长的一条街，走下来10来分钟的样子。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E6%AD%A5%E8%A1%8C%E8%A1%97%E9%81%93.jpg" alt="Walking Street"></p><p>走到尽头可以看到 Pattaya City的牌子。不远就是个码头，通往附近岛屿的。</p><p><em>Pattaya City</em></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85pattary-city.jpg" alt="Pattaya City"></p><h2 id="人妖秀"><a href="#人妖秀" class="headerlink" title="人妖秀"></a>人妖秀</h2><p>网上定了芭提雅的人妖秀，下午18点场。然后，逛完步行街周边，坐上嘟嘟车回到酒店躺尸。大概17点的样子，出门打车去秀场。叫了个出租车，直接被司机坑，而且这司机还不认路。带着我们转了一大圈。后来发现，走过去也就半小时的样子。“老司机”就开了将近半小时。</p><p><em>门票</em></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E9%97%A8%E7%A5%A8.jpg" alt="人妖秀门票"></p><p><em>入场前</em></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E4%BA%BA%E5%A6%96%E5%9C%BA%E5%86%85.jpg" alt="入场前"></p><p>分配到了第一排，人妖几个领舞的挺漂亮，其他一般。看秀期间不让拍照，所以，没有留下什么。时长大约75分钟左右，看完出来天已经黑了。环顾四周，夜市摊位、酒吧门店，人流涌动。</p><p>在芭提雅的最后一晚，想再看看这座夜色撩人的都市。步行回到酒店，街道两旁灯红酒绿。走了大概半小时的样子，到了酒店。</p><h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>比较遗憾，没有去声色场所看看。一个词形容芭提雅“夜色撩人”。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;芭提雅篇&quot;&gt;&lt;a href=&quot;#芭提雅篇&quot; class=&quot;headerlink&quot; title=&quot;芭提雅篇&quot;&gt;&lt;/a&gt;芭提雅篇&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;芭提雅（Pattaya），是中南半岛南端的泰国一处著名海景度假胜地。&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;芭提雅作为十一最后的一个旅游城市，停留2天。主要目的，看人妖秀。&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;标星的是收藏地点&lt;/em&gt;&lt;br&gt;&lt;img src=&quot;https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E8%8A%AD%E6%8F%90%E9%9B%85%E8%8A%AD%E6%8F%90%E9%9B%85%E5%9C%B0%E5%9B%BE.jpg&quot; alt=&quot;地图&quot;&gt;&lt;/p&gt;
     
     </summary>
     
