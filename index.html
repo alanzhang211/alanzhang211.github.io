@@ -284,6 +284,189 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2019/07/20/集群治理之存储治理篇/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Alan Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="悟">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/20/集群治理之存储治理篇/" itemprop="url">集群治理之存储治理篇</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-20T00:01:05+08:00">
+                2019-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2019/07/20/集群治理之存储治理篇/" class="leancloud_visitors" data-flag-title="集群治理之存储治理篇">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>转眼间，七月过去一半有余。感觉时间过的好快，上周末还在和小伙伴讨论去哪玩，这又到周末了。回头看看，距离上篇文章差不多过去一个月。是时候总结下这一个月干了点啥了。</p>
+<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>自从入了数据的坑，感觉有做不完的优化。和以前做业务系统不同，之前，更多的是被源源不断的业务需求砸晕。而如今，做基础数据建设，每天都在想法设法优化数据，优化集群。怎么把数据的价值体现的更好上。</p>
+<p>最近忙着搞数据治理。好像，这几天都在发送“账单”，催用户去处理数据。那么，有人会问：这是问什么呢？首先，数据有进无出。再大的存储系统也迟早会爆满。而且，从公司投入成本来算。没必要对一些冷数据或无用的数据投入过多的存储。</p>
+<p>在说说，如果一味的以堆加机器的方式来弥补存储的不足。一方面，成本增加；另一方面，运维的成本也会增加。每天路过大数据运维同事旁边，拍拍肩膀：“今周打算加多少机器？”。对于运维同学来说，不也是很尴尬的一件事么？加机器，重复而无聊。虽说可以使用自动化部署，但是这种只增无减必定会带来维护成本上的“熵”增。</p>
+<h1 id="措施"><a href="#措施" class="headerlink" title="措施"></a>措施</h1><p>面临这些囧状，对于数据的治理就迫在眉睫。就像人有生老病死，数据同样也有产生和消亡的过程。那么，数据就是有“生命”的实体。</p>
+<hr>
+<p><em>如何开展数据治理呢？</em></p>
+<hr>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/20/集群治理之存储治理篇/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2019/06/16/聊聊数据治理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1872,182 +2055,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://alanzhang.me/2018/05/14/拆骨之沙埠DNF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Alan Zhang">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="悟">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/14/拆骨之沙埠DNF/" itemprop="url">拆骨之沙埠DNF</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-14T22:56:41+08:00">
-                2018-05-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/户外运动/" itemprop="url" rel="index">
-                    <span itemprop="name">户外运动</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/05/14/拆骨之沙埠DNF/" class="leancloud_visitors" data-flag-title="拆骨之沙埠DNF">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  636
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>今年越野跑的第一个DNF献给了拆骨。都说拆骨让你又爱又恨，爱：补给好；恨：关门卡的紧。<br><img src="https://github.com/alanzhang211/blog-image/raw/master//2018/05/%E6%B2%99%E5%9F%A0/%E6%B2%99%E5%9F%A0%E8%B6%8A%E9%87%8E.jpeg" alt="沙埠越野跑"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/05/14/拆骨之沙埠DNF/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2100,7 +2107,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">138</span>
+                  <span class="site-state-item-count">139</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2122,7 +2129,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">201</span>
+                  <span class="site-state-item-count">202</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

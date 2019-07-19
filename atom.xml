@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2019-06-18T18:00:47.824Z</updated>
+  <updated>2019-07-19T16:11:32.926Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>集群治理之存储治理篇</title>
+    <link href="http://alanzhang.me/2019/07/20/%E9%9B%86%E7%BE%A4%E6%B2%BB%E7%90%86%E4%B9%8B%E5%AD%98%E5%82%A8%E6%B2%BB%E7%90%86%E7%AF%87/"/>
+    <id>http://alanzhang.me/2019/07/20/集群治理之存储治理篇/</id>
+    <published>2019-07-19T16:01:05.000Z</published>
+    <updated>2019-07-19T16:11:32.926Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>转眼间，七月过去一半有余。感觉时间过的好快，上周末还在和小伙伴讨论去哪玩，这又到周末了。回头看看，距离上篇文章差不多过去一个月。是时候总结下这一个月干了点啥了。</p><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>自从入了数据的坑，感觉有做不完的优化。和以前做业务系统不同，之前，更多的是被源源不断的业务需求砸晕。而如今，做基础数据建设，每天都在想法设法优化数据，优化集群。怎么把数据的价值体现的更好上。</p><p>最近忙着搞数据治理。好像，这几天都在发送“账单”，催用户去处理数据。那么，有人会问：这是问什么呢？首先，数据有进无出。再大的存储系统也迟早会爆满。而且，从公司投入成本来算。没必要对一些冷数据或无用的数据投入过多的存储。</p><p>在说说，如果一味的以堆加机器的方式来弥补存储的不足。一方面，成本增加；另一方面，运维的成本也会增加。每天路过大数据运维同事旁边，拍拍肩膀：“今周打算加多少机器？”。对于运维同学来说，不也是很尴尬的一件事么？加机器，重复而无聊。虽说可以使用自动化部署，但是这种只增无减必定会带来维护成本上的“熵”增。</p><h1 id="措施"><a href="#措施" class="headerlink" title="措施"></a>措施</h1><p>面临这些囧状，对于数据的治理就迫在眉睫。就像人有生老病死，数据同样也有产生和消亡的过程。那么，数据就是有“生命”的实体。</p><hr><p><em>如何开展数据治理呢？</em></p><hr><a id="more"></a><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/07/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_970aee49-1db9-4c80-a2b3-6bce60bdb419.png" alt="数据治理"></p><h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>首先，要赋予数据生命，涉及到生命周期管理，这是贯穿整个数据链路上的。针对不同等级的数据设定不同的“生命”长短。过期的表删除，冷备归档，最终销毁。</p><h2 id="账单"><a href="#账单" class="headerlink" title="账单"></a>账单</h2><p>其次，要使用户对数据有感知，让用户知道自己使用的数据资产情况。那么，就会抽象出另一个概念“存储账单”。说到这，你可以理解为用户使用的存储成本计费。这样一来，将无感知物理存储，转变为更贴于生活的成本计费。比如：100G每天计费1元。那么，用户就会知道自己的表大概一天使用多少钱。只要谈到“钱”，一般人都不会轻视，“壕”哥除外。进行个人日账单，部门周账单的推送。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/07/WechatIMG48.jpeg" alt="个人账单"></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/07/WechatIMG47.jpeg" alt="部门账单"></p><h2 id="数据行为分析"><a href="#数据行为分析" class="headerlink" title="数据行为分析"></a>数据行为分析</h2><p>再者，有了上面的<code>生命周期</code>：可以实现用户自助管理自己数据生命，设置不同的生命周期，进行无用表的删除。同样，也可以对数据进行恢复。<code>存储账单</code>：直观的体现数据成本，督促用户治理数据。</p><p>那么，似乎还需要给用户提供治理建议。这么一来就有了关于数据行为分析的概念。简单来说就是数据的增长（用户可以重点关注增长过快的数据），数据的访问情况（用户可以区分冷热数据）。其底层，会依赖hdfs的一些系统数据和metastore的数据。技术上，就是通过hdfs的fsimage分析存储目录的最近访问时间和存储目录大小等，再结合hive的metastore元数据信息，给出表的一些行为表现。从而，给予用户一些指导作用。</p><p>经历过数据治理的同学，一般都会被用户质问：</p><ul><li>这个表为什么没用，最近什么时候访问的？</li><li>我用的很多么，我业务就需要啊。</li><li>能给出优化建议么？<br>等等。</li></ul><p>所以，有这个数据行为分析展示。咱们治理的同学说话也有了底气不是么？</p><h1 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h1><p>大概治理了2周，公司的数据量从之前的接近12PB降低到现在的10PB不到，降幅在16.7%。同时，用户也接受了<code>表生命周期</code>这个概念，能够主动去设置表生命周期来管理表。</p><h1 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h1><ul><li>用户还是需要有更强的数据意识，当然，做业务的还是业务为重，这也不能怪他们。</li><li>缺少了点奖罚措施，或者说是治理委员会的一种治理制度规范。</li><li>在自动化治理上，工具还是欠缺。</li></ul><h1 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h1><ol><li><p>首先，希望在未来能够从数据源头做起，提高数据质量，避免不必要的加工环节，优化ETL链路（依赖表的血缘）。如果有自动化的工具，可以检测到数据链路，预测给出最优链路是再好不过的了。</p></li><li><p>其次，就是跟完善的数据行为分析和优化建议。结合各个指标的TopN进行治理。</p></li><li><p>然后，就是数据的准确唯一性，对判断依据统一化。</p></li><li><p>再者，加大“曝光度”。对数据大户，和数据使用不合理的用户增加其曝光度。这样，推动起来更高效。</p></li><li><p>最后，能够实现数据配额的管理，对部门使用数据量严格把控。</p></li></ol><p><em>还有很多很多….欢迎交流！</em></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;转眼间，七月过去一半有余。感觉时间过的好快，上周末还在和小伙伴讨论去哪玩，这又到周末了。回头看看，距离上篇文章差不多过去一个月。是时候总结下这一个月干了点啥了。&lt;/p&gt;
+&lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;自从入了数据的坑，感觉有做不完的优化。和以前做业务系统不同，之前，更多的是被源源不断的业务需求砸晕。而如今，做基础数据建设，每天都在想法设法优化数据，优化集群。怎么把数据的价值体现的更好上。&lt;/p&gt;
+&lt;p&gt;最近忙着搞数据治理。好像，这几天都在发送“账单”，催用户去处理数据。那么，有人会问：这是问什么呢？首先，数据有进无出。再大的存储系统也迟早会爆满。而且，从公司投入成本来算。没必要对一些冷数据或无用的数据投入过多的存储。&lt;/p&gt;
+&lt;p&gt;在说说，如果一味的以堆加机器的方式来弥补存储的不足。一方面，成本增加；另一方面，运维的成本也会增加。每天路过大数据运维同事旁边，拍拍肩膀：“今周打算加多少机器？”。对于运维同学来说，不也是很尴尬的一件事么？加机器，重复而无聊。虽说可以使用自动化部署，但是这种只增无减必定会带来维护成本上的“熵”增。&lt;/p&gt;
+&lt;h1 id=&quot;措施&quot;&gt;&lt;a href=&quot;#措施&quot; class=&quot;headerlink&quot; title=&quot;措施&quot;&gt;&lt;/a&gt;措施&lt;/h1&gt;&lt;p&gt;面临这些囧状，对于数据的治理就迫在眉睫。就像人有生老病死，数据同样也有产生和消亡的过程。那么，数据就是有“生命”的实体。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;em&gt;如何开展数据治理呢？&lt;/em&gt;&lt;/p&gt;
+&lt;hr&gt;
+    
+    </summary>
+    
+      <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="数据治理" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/"/>
+    
+      <category term="集群治理" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E6%B2%BB%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>聊聊数据治理</title>
@@ -527,31 +560,6 @@
       <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
     
       <category term="杂谈" scheme="http://alanzhang.me/tags/%E6%9D%82%E8%B0%88/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>泰囧-尾声</title>
-    <link href="http://alanzhang.me/2017/10/30/%E6%B3%B0%E5%9B%A7-%E5%B0%BE%E5%A3%B0/"/>
-    <id>http://alanzhang.me/2017/10/30/泰囧-尾声/</id>
-    <published>2017-10-30T11:17:42.000Z</published>
-    <updated>2019-02-26T15:14:20.407Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="尾篇"><a href="#尾篇" class="headerlink" title="尾篇"></a>尾篇</h2><p>泰国第8天，上午从芭提雅汽车站坐NCA回到曼谷。然后出租车入住酒店，稍作调整，准备最后的狂欢。</p><h2 id="告别曼谷"><a href="#告别曼谷" class="headerlink" title="告别曼谷"></a>告别曼谷</h2><p>酒店稍作休息，和在泰国的朋友约好在Terminal 21见面。之后就是去World Central买之前看好的东西。<br><a id="more"></a></p><h2 id="T21"><a href="#T21" class="headerlink" title="T21"></a>T21</h2><p><strong>这是一个设计很独特，以机场航站楼为主题的商场，总共9层，每1层楼都是1个不同的城市，比如1层是巴黎、2层是东京、3层是伦敦等，非常的富有创意。</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/T21.jpg" alt="T21"></p><p>在从下到上转了一圈。</p><p>LG层为超市、点心小店、奶茶铺，G层的主题为“罗马天堂”主要有各大品牌店的专卖店，而M，1,2,3楼则专卖衣物、饰品、鞋类，大都为泰国当地品牌，其中不乏众多设计精美的个性小店，4,5楼则是各大餐厅和饮品店，楼上西班牙菜、日本菜、中国菜、烧烤，样样齐全，而且属于中等价位。6楼则有健身房和SF电影院。<br><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/sf.jpg" alt="SF"></p><p>喜欢拍照，装逼的小朋友这里不容错过。<br><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E6%A1%A5.jpg" alt></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E4%BA%8C%E6%AC%A1%E5%85%83.jpg" alt="二次元"></p><p>大概等了1个多小时，主人公到了（不放图，不放图，不放图）。在她的引导下，再一次审视了这座建筑。然后，找了家甜品店坐下。调侃对方，以及近日的一些经历。<strong>居然吃到了亲手做的鸡蛋灌饼，嗯，有点辣。</strong>。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E9%B8%A1%E8%9B%8B%E7%81%8C%E9%A5%BC.jpg" alt="鸡蛋灌饼"></p><h2 id="World-Central购物"><a href="#World-Central购物" class="headerlink" title="World Central购物"></a>World Central购物</h2><p><strong>位于曼谷的市中心，是东南亚最大的购物中心之一。它由三个部分组成：两头是Zen百货和伊势丹（Isetan）百货，中间是Central World。</strong></p><p>大概4点钟的样子，和主角告别后，和小好伙伴约好在World Central碰头。</p><p>买了一堆的NaRaYa包包，和一些药膏，化妆品等。这也是之前看好的，所以到了直接买，目标明确。不擅长购物买东西，也不喜欢逛商场。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/nara.jpg" alt="nara"></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E8%8D%AF.jpg" alt="药"></p><p>东西买好后，商场内选了一家日料店。慰问一下饥肠辘辘的肚皮。随后，打车回到酒店。最后，以购物告别曼谷。</p><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E5%A5%B6%E6%98%94.jpg" alt><br>第二天上午飞机返回，结束十一的泰囧之旅。一个词形容曼谷“天使之城”。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E6%97%B6%E9%97%B4%E8%BD%B4.jpg" alt="时间轴"><br>总共花销大概7000软妹币左右，机票占据一半江山。结束了为时9天的泰国之旅。感受到了东南亚国家的生活节奏，品味到了不同的味道。曼谷-繁华；清迈-宁静；芭提雅-妩媚。坐在回去的飞机上，慢慢回顾这些天的经历。有蒙逼无奈，有被坑恼火，有欢乐，有抱怨等。虽然很疲惫，但是内心很满足。</p><h2 id><a href="#" class="headerlink" title></a><img src="https://github.com/alanzhang211/blog-image/raw/master//2017/10/%E6%B3%B0%E5%9B%BD/%E5%B0%BE%E5%A3%B0/%E5%B0%BE%E5%9B%BE.jpg" alt="尾图"></h2><p><em>行万里路，品味不同道路。 期待后续旅程。</em></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;尾篇&quot;&gt;&lt;a href=&quot;#尾篇&quot; class=&quot;headerlink&quot; title=&quot;尾篇&quot;&gt;&lt;/a&gt;尾篇&lt;/h2&gt;&lt;p&gt;泰国第8天，上午从芭提雅汽车站坐NCA回到曼谷。然后出租车入住酒店，稍作调整，准备最后的狂欢。&lt;/p&gt;
-&lt;h2 id=&quot;告别曼谷&quot;&gt;&lt;a href=&quot;#告别曼谷&quot; class=&quot;headerlink&quot; title=&quot;告别曼谷&quot;&gt;&lt;/a&gt;告别曼谷&lt;/h2&gt;&lt;p&gt;酒店稍作休息，和在泰国的朋友约好在Terminal 21见面。之后就是去World Central买之前看好的东西。&lt;br&gt;
-    
-    </summary>
-    
-      <category term="行万里路" scheme="http://alanzhang.me/categories/%E8%A1%8C%E4%B8%87%E9%87%8C%E8%B7%AF/"/>
-    
-    
-      <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
-    
-      <category term="行万里路" scheme="http://alanzhang.me/tags/%E8%A1%8C%E4%B8%87%E9%87%8C%E8%B7%AF/"/>
     
   </entry>
   
