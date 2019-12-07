@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2019-10-31T15:03:02.444Z</updated>
+  <updated>2019-12-07T11:20:51.215Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Alluxio初探</title>
+    <link href="http://alanzhang.me/2019/12/07/Alluxio%E5%88%9D%E6%8E%A2/"/>
+    <id>http://alanzhang.me/2019/12/07/Alluxio初探/</id>
+    <published>2019-12-07T09:54:03.000Z</published>
+    <updated>2019-12-07T11:20:51.215Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又到年底了，职场充斥着“裁员”、“优化”味道。前段时间所在公司也经历了一波，反正有那么几天周围的同事都无心工作。这周公司也算是“稳定”了，不过还是有些危机感。有时候，在反思这一年来自己工作的“亮点”。想了想，好像一直在“优化”的路上。这里的优化是和工作相关的，集群，存储，计算的治理占据了2019大半的“江山”。说来惭愧，好像也没实打实地落地成一个产品。</p><p>又到周末了，天气貌似不错。没有活动，自己看了看工作wiki，理了理工作内容。过程中，很多细节上的事情没有沉淀（虽然今年也依据工作内容输出了一点点想法），缺少细致的总结。导致现在很多事情让自己说，还是有很多不确定的细节。</p><a id="more"></a><h2 id="再看alluxio"><a href="#再看alluxio" class="headerlink" title="再看alluxio"></a>再看alluxio</h2><p>看到年初第一件事，集群拆分。主要工作是为了隔离ETL任务和实时任务(spark streaming或flink作业)。新的实时集群，只有计算资源，没有过多的存储。所以，问题就抽象成：计算资源隔离，存储资源共享（hdfs）问题。当时也做了简单的调研。最终采用了最快最直接的方式实现了。具体细节见：</p><p>有大半年没关注alluxio了，看了看官网。稳定版本已经从之前的<code>1.8.1</code>到了<code>2.1.0</code>，可见社区也是很活跃的。然后看到出了一本书《Alluxio：大数据统一存储原理与实践》。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/12/Alluxio_%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%BB%9F%E4%B8%80%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.jpg" alt="Alluxio：大数据统一存储原理与实践"></p><p>于是，买了一本拜读拜读。书不厚，大概花了一下午，简单过了下，有些章节泛读（或跳过）。将一些需要进一步探索的章节输出脑图。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/12/alluxio.jpg" alt="脑图"></p><p>整个书大概可以分3部分，一部分是原理性描述的（也是后续需要重点研究的）；另一部分，描述如何集成部署，这块可以放在以后读，和官网的文档对比了下，差不多（可以跳过）。其余部分，就是一些实践案例分享，一些场景分析（可以泛读，看看自己是否面临类似的问题）。</p><p><a href="https://docs.alluxio.io/os/user/stable/cn/Overview.html" target="_blank" rel="noopener">看看官方文档</a></p><h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>看了这本书后，对alluxio的一些核心概念产生了兴趣。当然，很多设计理念，世面上大数据框架都有涉及。比如：高可用；master-worker；缓存；时间窗口；缓存策略（LRU等）；远程过程调用等等，可见，底层的实现原理都是通的。于是，萌生了一些好奇，一些策略是如何在alluxio中实践的？</p><p>早期，在调研的时候没有好好去看实现细节。经过今天的梳理和反思，感觉是需要细致的去了解下。于是<code>fork</code>源码，打算花上几天理理代码思路。</p><hr><p>待续…</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;又到年底了，职场充斥着“裁员”、“优化”味道。前段时间所在公司也经历了一波，反正有那么几天周围的同事都无心工作。这周公司也算是“稳定”了，不过还是有些危机感。有时候，在反思这一年来自己工作的“亮点”。想了想，好像一直在“优化”的路上。这里的优化是和工作相关的，集群，存储，计算的治理占据了2019大半的“江山”。说来惭愧，好像也没实打实地落地成一个产品。&lt;/p&gt;
+&lt;p&gt;又到周末了，天气貌似不错。没有活动，自己看了看工作wiki，理了理工作内容。过程中，很多细节上的事情没有沉淀（虽然今年也依据工作内容输出了一点点想法），缺少细致的总结。导致现在很多事情让自己说，还是有很多不确定的细节。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="Alluxio" scheme="http://alanzhang.me/tags/Alluxio/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+  </entry>
   
   <entry>
     <title>一些心酸经历</title>
@@ -39,9 +66,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="spark" scheme="http://alanzhang.me/tags/spark/"/>
     
@@ -155,6 +182,33 @@
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="杂谈" scheme="http://alanzhang.me/tags/%E6%9D%82%E8%B0%88/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>集群优化心酸历程</title>
+    <link href="http://alanzhang.me/2019/03/15/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96%E5%BF%83%E9%85%B8%E5%8E%86%E7%A8%8B/"/>
+    <id>http://alanzhang.me/2019/03/15/集群优化心酸历程/</id>
+    <published>2019-03-15T10:12:11.000Z</published>
+    <updated>2019-12-07T11:15:08.346Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>最近在做公司集群优化工作，现状是公司的离线集群跑着一些实时任务（flink和sparkstreaming）。有时候会因为晚上离线任务起来后，集群资源不够导致实时任务延迟等。为了解决这个问题，部署了一套实时集群，专门用来跑实时任务。从而将实时任务和离线任务进行隔离。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>目前，有些spark streaming任务需要读写hdfs或着操作hive表。那么如果要迁移这些任务，就需要满足实时集群可以访问离线集群的存储资源。鉴于这种场景，进行了相关调研。</p><a id="more"></a><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>将离线集群中所有的实时任务迁移至实时集群进行管理。实现计算独立+存储共享，进而实现集群优化的目的。</p><h2 id="业界方案"><a href="#业界方案" class="headerlink" title="业界方案"></a>业界方案</h2><h3 id="Federation-Viewfs"><a href="#Federation-Viewfs" class="headerlink" title="Federation+Viewfs"></a>Federation+Viewfs</h3><p>参考：<a href="http://www.searchdoc.cn/hadoop/hadoop.apache.org/docs/r2.9.0/hadoop-project-dist/hadoop-hdfs/ViewFs.com.coder114.cn.html" target="_blank" rel="noopener">http://www.searchdoc.cn/hadoop/hadoop.apache.org/docs/r2.9.0/hadoop-project-dist/hadoop-hdfs/ViewFs.com.coder114.cn.html</a></p><p>hadoop 原生的解决方案。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/03/federation.png" alt="MultipleNamenodes"></p><p>优点：</p><ol><li>原生自带支持，无需二次开发。</li><li>系统兼容性好。</li></ol><p>缺点：</p><ol><li>需要客户端改动很多配置，如果新增节点，处理比较繁琐，扩展不方便。</li><li>需要修改客户端代码，由以前hdfs://xxx/，改为viewfs://xxx/。</li></ol><h3 id="Alluxio"><a href="#Alluxio" class="headerlink" title="Alluxio"></a>Alluxio</h3><p>官网：<a href="http://www.alluxio.org/" target="_blank" rel="noopener">http://www.alluxio.org/</a></p><p>Alluxio可以为那些大数据应用提供一个数量级的加速，同时它还提供了通用的数据访问接口。对于底层存储系统，Alluxio连接了大数据应用和传统存储系统之间的间隔，并且重新定义了一组面向数据使用的工作负载程序。</p><p>因Alluxio对应用屏蔽了底层存储系统的整合细节，所以任何底层存储系统都可以支撑运行在Alluxio之上的应用和框架。此外Alluxio可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/03/alluxio.png" alt="Alluxio"></p><p>优点：</p><ol><li>易于扩展，支持多种存储。</li><li>可以优化spark的任务性能，加速数据处理。</li><li>代码开源：<a href="https://github.com/Alluxio/alluxio。" target="_blank" rel="noopener">https://github.com/Alluxio/alluxio。</a></li></ol><p>缺点：</p><ol><li>需要客户端依赖Alluxio，使用Alluxio的api访问hdfs数据。</li><li>对客户端不透明，需要调整数据接口即协议。</li><li>集群需要额外部署Alluxio，增加运维成本。</li></ol><h4 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h4><ol><li><p>alluxio如何感知底层文件系统变更？</p></li><li><p>alluxio如何保证数据的实时性？</p></li><li><p>如何保证数据一致性？</p></li></ol><h3 id="二次开发方案"><a href="#二次开发方案" class="headerlink" title="二次开发方案"></a>二次开发方案</h3><p>实现一个namenode代理，将客户端请求由逻辑路径路由到物理路径。</p><p>目前，了解到今日头条有实现类似的技术。</p><p>开源版本：<a href="https://github.com/bytedance/nnproxy" target="_blank" rel="noopener">https://github.com/bytedance/nnproxy</a></p><hr><h2 id="实际实施方案"><a href="#实际实施方案" class="headerlink" title="实际实施方案"></a>实际实施方案</h2><h3 id="hdfs-federation"><a href="#hdfs-federation" class="headerlink" title="hdfs federation"></a>hdfs federation</h3><p>借鉴hdfs federation的namenode横向扩展能力，以及资源隔离的特性。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/03/hdfs.png" alt="hdfs federation"></p><h4 id="hdfs-site-xml配置"><a href="#hdfs-site-xml配置" class="headerlink" title="hdfs-site.xml配置"></a>hdfs-site.xml配置</h4><p>hdfs-site.xml中增加多个nameservice（一个离线，一个实时）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;!--Autogenerated by Cloudera Manager--&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.nameservices&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;nameserviceoffline,nameserviceonline&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">(其他配置省略，直接从两个集群的hdfs-site.xml拷贝就好)</span><br><span class="line">......</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p><h3 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h3><table><thead><tr><th>用例</th><th>用例</th></tr></thead><tbody><tr><td>跨集群读hdfs</td><td>pass</td></tr><tr><td>跨集群写hdfs</td><td>pass</td></tr><tr><td>跨集群读hive表</td><td>pass</td></tr><tr><td>跨集群写hive表</td><td>pass</td></tr></tbody></table><h4 id="读写hdfs"><a href="#读写hdfs" class="headerlink" title="读写hdfs"></a>读写hdfs</h4><h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><h6 id="java"><a href="#java" class="headerlink" title="java"></a>java</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class JavaSparkHdfsExample &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        SparkConf sparkConf = new SparkConf().setAppName(&quot;JavaSparkHdfsExample&quot;);</span><br><span class="line">        JavaSparkContext sc = new JavaSparkContext(sparkConf);</span><br><span class="line">//      JavaStreamingContext sc = new JavaStreamingContext(sparkConf, Durations.seconds(1));</span><br><span class="line">        JavaRDD&lt;String&gt; textFile = sc.textFile(&quot;hdfs://nameserviceoffline/tmp/zhq/kv1.txt&quot;);</span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; counts = textFile</span><br><span class="line">            .flatMap(s -&gt; Arrays.asList(s.split(&quot;,&quot;)).iterator())</span><br><span class="line">            .mapToPair(word -&gt; new Tuple2&lt;&gt;(word, 1))</span><br><span class="line">            .reduceByKey((a, b) -&gt; a + b);</span><br><span class="line">        try &#123;</span><br><span class="line">            FileSystem fs = FileSystem.get(new URI(&quot;hdfs://nameserviceoffline/tmp/zhq/kv2.txt&quot;),sc.hadoopConfiguration());</span><br><span class="line">            fs.delete(new Path(&quot;hdfs://nameserviceoffline/tmp/zhq/kv2.txt&quot;),true);</span><br><span class="line">            counts.saveAsTextFile(&quot;hdfs://nameserviceoffline/tmp/zhq/kv2.txt&quot;);</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (URISyntaxException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h6 id="spark-shell"><a href="#spark-shell" class="headerlink" title="spark-shell"></a>spark-shell</h6><p>在实时集群提交<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$SPARK_HOME/bin/spark-submit \</span><br><span class="line">                --master yarn \</span><br><span class="line">                --deploy-mode cluster \</span><br><span class="line">                --executor-memory 512M \</span><br><span class="line">                --executor-cores  1 \</span><br><span class="line">                --conf spark.executor.extraClassPath=/opt/cloudera/parcels/CDH/jars/htrace-core-3.2.0-incubating.jar \</span><br><span class="line">                --conf spark.executorEnv.JAVA_HOME=/usr/zhq/java \</span><br><span class="line">                --conf spark.yarn.appMasterEnv.JAVA_HOME=/usr/zhq/java/ \</span><br><span class="line">                --conf spark.yarn.dist.files=/home/zhq/conf/hdfs-site.xml</span><br><span class="line">                --driver-memory 512M \</span><br><span class="line">                --queue root.sale_prod_etl.sla \</span><br><span class="line">                --verbose \</span><br><span class="line">                --name &quot;sparkdemo&quot; \</span><br><span class="line">                --class JavaSparkHdfsExample \</span><br><span class="line">                SparkDemo-1.0-SNAPSHOT.jar;</span><br></pre></td></tr></table></figure></p><p><strong>关键</strong>针对任务，提交参数中<code>spark.yarn.dist.files</code> 制定配置了federation的hdfs-site.xml。</p><h4 id="读写hive表"><a href="#读写hive表" class="headerlink" title="读写hive表"></a>读写hive表</h4><h5 id="测试代码-1"><a href="#测试代码-1" class="headerlink" title="测试代码"></a>测试代码</h5><h6 id="java-1"><a href="#java-1" class="headerlink" title="java"></a>java</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">public class JavaSparkHiveExample &#123;</span><br><span class="line">    // $example on:spark_hive$</span><br><span class="line">    public static class Record implements Serializable &#123;</span><br><span class="line">        private int key;</span><br><span class="line">        private String value;</span><br><span class="line">        public int getKey() &#123;</span><br><span class="line">            return key;</span><br><span class="line">        &#125;</span><br><span class="line">        public void setKey(int key) &#123;</span><br><span class="line">            this.key = key;</span><br><span class="line">        &#125;</span><br><span class="line">        public String getValue() &#123;</span><br><span class="line">            return value;</span><br><span class="line">        &#125;</span><br><span class="line">        public void setValue(String value) &#123;</span><br><span class="line">            this.value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // $example off:spark_hive$</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // $example on:spark_hive$</span><br><span class="line">        SparkConf sparkConf = new SparkConf().setAppName(&quot;JavaSparkHiveExample&quot;);</span><br><span class="line">        SparkSession spark = SparkSession</span><br><span class="line">            .builder()</span><br><span class="line">            .config(sparkConf)</span><br><span class="line">            .enableHiveSupport()</span><br><span class="line">            .getOrCreate();</span><br><span class="line">        spark.sql(&quot;SELECT * FROM ods.src_test&quot;).show();</span><br><span class="line">        // Aggregation queries are also supported.</span><br><span class="line">        spark.sql(&quot;SELECT COUNT(*) FROM ods.src_test&quot;).show();</span><br><span class="line"></span><br><span class="line">        //insert data</span><br><span class="line">        spark.sql(&quot;insert into ods.src_test select 1,&apos;val_1&apos;&quot;);</span><br><span class="line">        spark.sql(&quot;SELECT COUNT(*) FROM ods.src_test&quot;).show();</span><br><span class="line">        spark.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h6 id="spark-shell-1"><a href="#spark-shell-1" class="headerlink" title="spark-shell"></a>spark-shell</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$SPARK_HOME/bin/spark-submit \</span><br><span class="line">                --master yarn \</span><br><span class="line">                --deploy-mode cluster \</span><br><span class="line">                --executor-memory 512M \</span><br><span class="line">                --executor-cores  1 \</span><br><span class="line">                --conf spark.executor.extraClassPath=/opt/cloudera/parcels/CDH/jars/htrace-core-3.2.0-incubating.jar \</span><br><span class="line">                --conf spark.executorEnv.JAVA_HOME=/usr/zhq/java \</span><br><span class="line">                --conf spark.yarn.appMasterEnv.JAVA_HOME=/usr/zhq/java/ \</span><br><span class="line">                --conf spark.yarn.dist.files=/home/zhq/conf/hive-site.xml,/home/zhq/conf/hdfs-site.xml,/home/zhq/conf/core-site.xml \</span><br><span class="line">                --driver-memory 512M \</span><br><span class="line">                --queue root.sale_prod_etl.sla \</span><br><span class="line">                --verbose \</span><br><span class="line">                --name &quot;sparkdemo&quot; \</span><br><span class="line">                --class JavaSparkHiveExample \</span><br><span class="line">                SparkDemo-1.0-SNAPSHOT.jar;</span><br></pre></td></tr></table></figure><p>这里，同样通过<code>spark.yarn.dist.files</code> 重写spark运行参数。</p><ul><li><code>hive-site.xml</code>直接从离线集群拷贝。</li><li><code>hdfs-site.xml</code>是上面配置的hdfs federation。</li><li><code>core-site.xml</code>直接从离线集群拷贝，这里为了覆盖默认的实时集群的core-site.xml（因为spark hive 在写表的时候，默认是加载集群的core-site.xml中<code>fs.defaultFS</code>找hdfs目录的。当然，也可以直接程序中sparkcontent设置<code>fs.defaultFS</code>）。</li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>遇到问题还是要仔细分析问题本质，然后付诸实践。原理的东西，有时间还是要仔细推敲一下。比如：spark hive 中的<code>HiveClientImpl</code>实现。就会知道大概的一个sql执行过程，延伸到有关sql 解析和执行计划，如何分解成MR任务，然后落表的。很多细节需要理解，路途漫漫。</p><p>Alluxio方案也验证过，方案可行，需要注意的问题比较多，出现或多或少的问题主要还是不熟悉，有一定学习成本。</p><p>比如：</p><p><strong>报错</strong></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Peer indicated failure: Plain authentication failed: User yarn is not configured for any impersonation. impersonationUser: hdfs</span><br></pre></td></tr></table></figure><p><strong>解决</strong>：需修改alluxio配置文件alluxio-site.properties，添加如下内容以实现yarn对其他用户的代理权限<code>alluxio.master.security.impersonation.yarn.users=*</code></p><hr><p>后面，会研究下<code>Alluxio</code>，这个“加速器”，前景貌似还不错，也欢迎一起交流讨论。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;最近在做公司集群优化工作，现状是公司的离线集群跑着一些实时任务（flink和sparkstreaming）。有时候会因为晚上离线任务起来后，集群资源不够导致实时任务延迟等。为了解决这个问题，部署了一套实时集群，专门用来跑实时任务。从而将实时任务和离线任务进行隔离。&lt;/p&gt;
+&lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;p&gt;目前，有些spark streaming任务需要读写hdfs或着操作hive表。那么如果要迁移这些任务，就需要满足实时集群可以访问离线集群的存储资源。鉴于这种场景，进行了相关调研。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="集群优化" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
@@ -280,13 +334,13 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -393,13 +447,13 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -517,58 +571,6 @@
       <category term="户外" scheme="http://alanzhang.me/tags/%E6%88%B7%E5%A4%96/"/>
     
       <category term="武功山" scheme="http://alanzhang.me/tags/%E6%AD%A6%E5%8A%9F%E5%B1%B1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>正则表达式堆栈溢出问题</title>
-    <link href="http://alanzhang.me/2017/12/03/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%A0%86%E6%A0%88%E6%BA%A2%E5%87%BA%E9%97%AE%E9%A2%98/"/>
-    <id>http://alanzhang.me/2017/12/03/正则表达式堆栈溢出问题/</id>
-    <published>2017-12-03T07:13:59.000Z</published>
-    <updated>2019-02-26T15:14:20.407Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>工作中，即席查询，涉及到对sql语句进行切割。解析sql中的注释信息。使用正则表达式匹配分组，进行处理。</p><h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>早上，数仓人员提供一个很长的sql（sql很长，此处省略）。</p><p>发现，执行后怎么也不出来结果。看了系统日志，也没发现报错信息，很奇怪。</p><a id="more"></a><h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="本地重现"><a href="#本地重现" class="headerlink" title="本地重现"></a>本地重现</h2><p>线上环境无Exception日志输出。于是，进行本地调试，现象重现了。</p><p><strong>代码</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 去除sql注释</span><br><span class="line"> * @param sql</span><br><span class="line"> * @return 返回去除注释后的sql</span><br><span class="line"> */</span><br><span class="line">public static String removeSqlRemark(String sql) &#123;</span><br><span class="line">    logger.info(&quot;removeSqlRemark sql=&#123;&#125;&quot;,sql);</span><br><span class="line">    String realSql = sql;</span><br><span class="line">    Pattern p = Pattern.compile(&quot;(?ms)(&apos;(?:&apos;&apos;|[^&apos;])*&apos;)|(\&quot;(?:\&quot;\&quot;|[^\&quot;])*\&quot;)|--.*?$|/\\*.*?\\*/&quot;);</span><br><span class="line">    realSql = p.matcher(realSql).replaceAll(&quot;$1$2&quot;);</span><br><span class="line">    logger.info(&quot;before format realSql=&#123;&#125;&quot;,realSql);</span><br><span class="line">    realSql = SqlUtil.formatSql(realSql);</span><br><span class="line">    logger.info(&quot;after format realSql=&#123;&#125;&quot;,realSql);</span><br><span class="line">    return realSql;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>发现出现如下错误：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.StackOverflowError</span><br><span class="line">at java.util.regex.Pattern$Loop.match(Pattern.java:4785)</span><br><span class="line">at java.util.regex.Pattern$GroupTail.match(Pattern.java:4717)</span><br><span class="line">at java.util.regex.Pattern$BranchConn.match(Pattern.java:4568)</span><br><span class="line">at java.util.regex.Pattern$CharProperty.match(Pattern.java:3777)</span><br><span class="line">......</span><br></pre></td></tr></table></figure><p>看到这里，就是堆栈溢出。看了报错的代码，是正则表达式解析问题。</p><p>然后，搜一下关键字“正则表达式 java.lang.StackOverflowError”。</p><p>搜出很多匹配的答案，其中有一篇描述的很透彻。</p><p><a href="http://www.importnew.com/26560.html" target="_blank" rel="noopener">Java 正则表达式 StackOverflowError问题及其优化</a>。</p><h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="调整线程栈"><a href="#调整线程栈" class="headerlink" title="调整线程栈"></a>调整线程栈</h2><p>-Xss<br>每个线程的Stack大小<br>Stack的大小限制着线程的数量.如果Stack过大就好导致内存溢漏.-Xss参数决定Stack大小,例如-Xss1024K.如果Stack太小,也会导致Stack溢漏。</p><h2 id="本地验证"><a href="#本地验证" class="headerlink" title="本地验证"></a>本地验证</h2><p>使用idea 验证，修改main 的run jvm参数。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/%E6%9D%82%E6%8A%80%EF%BC%8Fidea-2.jpg" alt></p><p>配置-Xss256k,-Xss512k,-Xss1m。然后，运行无上述问题。</p><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>java 正则表达式会出现递归调用（<strong>递归方法也要注意</strong>）。这就会出现栈溢出的风险。所以，在使用正则表达式的同时，注意堆栈溢出问题。<strong>不可用 Exception 捕获，因为 Error 直接继承自 Throwable 而非 Exception，所以即使你要捕获也应当捕获 Error。</strong></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h1&gt;&lt;p&gt;工作中，即席查询，涉及到对sql语句进行切割。解析sql中的注释信息。使用正则表达式匹配分组，进行处理。&lt;/p&gt;
-&lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;p&gt;早上，数仓人员提供一个很长的sql（sql很长，此处省略）。&lt;/p&gt;
-&lt;p&gt;发现，执行后怎么也不出来结果。看了系统日志，也没发现报错信息，很奇怪。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="java" scheme="http://alanzhang.me/categories/java/"/>
-    
-    
-      <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
-    
-      <category term="数据库" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-      <category term="连接池" scheme="http://alanzhang.me/tags/%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>非主键自增问题小记</title>
-    <link href="http://alanzhang.me/2017/12/01/%E9%9D%9E%E4%B8%BB%E9%94%AE%E8%87%AA%E5%A2%9E%E9%97%AE%E9%A2%98%E5%B0%8F%E8%AE%B0/"/>
-    <id>http://alanzhang.me/2017/12/01/非主键自增问题小记/</id>
-    <published>2017-12-01T11:17:25.000Z</published>
-    <updated>2019-02-26T15:14:20.413Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>现有一数据库表tableA，设计中有一个非主键的int型字段（下统称：dbId），需要实现递增需求。</p><a id="more"></a><h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><h2 id="获取最大值加1"><a href="#获取最大值加1" class="headerlink" title="获取最大值加1"></a>获取最大值加1</h2><p>获取最大值.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 伪代码</span><br><span class="line">int newDbId = select max(dbId) from tableA;</span><br></pre></td></tr></table></figure></p><p>然后加1<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-- 伪代码</span><br><span class="line">insert into tableA (dbId) values (newDbId + 1)</span><br></pre></td></tr></table></figure></p><p>这是最容易想到的。</p><blockquote><p>问题：由于不是原子操作，会导致在多线程下出现幻读问题。导致出现相同的dbId出现（不能保证唯一性）。</p></blockquote><h2 id="使用唯一性索引"><a href="#使用唯一性索引" class="headerlink" title="使用唯一性索引"></a>使用唯一性索引</h2><p>为了实现规避脏数据的产生，数据的唯一性。这里会想到唯一性索引。</p><p>所以，可以将dbId设置为tableA的非主键唯一性索引。利用索引的唯一性。避免相同dbId的产生。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter table tableA add unique index uidx_dBId (dbId);</span><br></pre></td></tr></table></figure><blockquote><p>此方式，依据数据库的实现唯一性。违反约束直接报错。</p></blockquote><h2 id="使用乐观锁"><a href="#使用乐观锁" class="headerlink" title="使用乐观锁"></a>使用乐观锁</h2><p>对共享dbId，在向数据库表tableA插叙新的记录的时候，增加条件检测。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into tableA (dbId) values (newDbID) where dbId &lt; newDbID</span><br></pre></td></tr></table></figure></p><p>这样，在出现线程ThreadA,ThreadB并发读取到同一个oldDbId。ThreadA先提交，ThreadB后提交，，ThreadB的sql就会不满足where条件，导致插入失败。</p><blockquote><p>方式2和方式3都是依赖数据库底层实现原理。<br>优点：简单，方便。<br>缺点：失去一次提交结果（违反约束，报错，提示用户重新提交）。</p></blockquote><h2 id="使用分布式锁"><a href="#使用分布式锁" class="headerlink" title="使用分布式锁"></a>使用分布式锁</h2><p>使用分布式锁实现（Redis）。<br>将max（dbId）放入Redis中，使用Redis的Incr操作的单线程的特性。完成dbId的自增需求。</p><blockquote><p>优点：保证没有重复的数据提交过程。保证流程的完整性（不会出现，报错，提交失败。）<br>缺点：增加了系统系统的复杂度和维护成本。</p></blockquote><h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>并发下的原子操作问题，是否有人会想到CAS操作呢？还有…</p><p><em>后续会写一些结合工作的《并发的那些事儿》专题。敬请期待！</em></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h1&gt;&lt;p&gt;现有一数据库表tableA，设计中有一个非主键的int型字段（下统称：dbId），需要实现递增需求。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="数据库" scheme="http://alanzhang.me/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
-    
-      <category term="数据库" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
