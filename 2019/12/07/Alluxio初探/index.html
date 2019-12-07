@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="2019,Alluxio,大数据,">
+  <meta name="keywords" content="大数据,2019,Alluxio,">
 
 
 
@@ -82,7 +82,7 @@
 
 
 <meta name="description" content="前言又到年底了，职场充斥着“裁员”、“优化”味道。前段时间所在公司也经历了一波，反正有那么几天周围的同事都无心工作。这周公司也算是“稳定”了，不过还是有些危机感。有时候，在反思这一年来自己工作的“亮点”。想了想，好像一直在“优化”的路上。这里的优化是和工作相关的，集群，存储，计算的治理占据了2019大半的“江山”。说来惭愧，好像也没实打实地落地成一个产品。 又到周末了，天气貌似不错。没有活动，自己">
-<meta name="keywords" content="2019,Alluxio,大数据">
+<meta name="keywords" content="大数据,2019,Alluxio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Alluxio初探">
 <meta property="og:url" content="http://alanzhang.me/2019/12/07/Alluxio初探/index.html">
@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/2019/12/Alluxio_%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%BB%9F%E4%B8%80%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.jpg">
 <meta property="og:image" content="https://github.com/alanzhang211/blog-image/raw/master/2019/12/alluxio.jpg">
-<meta property="og:updated_time" content="2019-12-07T11:20:51.215Z">
+<meta property="og:updated_time" content="2019-12-07T11:37:51.593Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Alluxio初探">
 <meta name="twitter:description" content="前言又到年底了，职场充斥着“裁员”、“优化”味道。前段时间所在公司也经历了一波，反正有那么几天周围的同事都无心工作。这周公司也算是“稳定”了，不过还是有些危机感。有时候，在反思这一年来自己工作的“亮点”。想了想，好像一直在“优化”的路上。这里的优化是和工作相关的，集群，存储，计算的治理占据了2019大半的“江山”。说来惭愧，好像也没实打实地落地成一个产品。 又到周末了，天气貌似不错。没有活动，自己">
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  741
+                  749
                 </span>
               
 
@@ -410,7 +410,7 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又到年底了，职场充斥着“裁员”、“优化”味道。前段时间所在公司也经历了一波，反正有那么几天周围的同事都无心工作。这周公司也算是“稳定”了，不过还是有些危机感。有时候，在反思这一年来自己工作的“亮点”。想了想，好像一直在“优化”的路上。这里的优化是和工作相关的，集群，存储，计算的治理占据了2019大半的“江山”。说来惭愧，好像也没实打实地落地成一个产品。</p>
 <p>又到周末了，天气貌似不错。没有活动，自己看了看工作wiki，理了理工作内容。过程中，很多细节上的事情没有沉淀（虽然今年也依据工作内容输出了一点点想法），缺少细致的总结。导致现在很多事情让自己说，还是有很多不确定的细节。</p>
 <a id="more"></a>
-<h2 id="再看alluxio"><a href="#再看alluxio" class="headerlink" title="再看alluxio"></a>再看alluxio</h2><p>看到年初第一件事，集群拆分。主要工作是为了隔离ETL任务和实时任务(spark streaming或flink作业)。新的实时集群，只有计算资源，没有过多的存储。所以，问题就抽象成：计算资源隔离，存储资源共享（hdfs）问题。当时也做了简单的调研。最终采用了最快最直接的方式实现了。具体细节见：</p>
+<h2 id="再看alluxio"><a href="#再看alluxio" class="headerlink" title="再看alluxio"></a>再看alluxio</h2><p>看到年初第一件事，集群拆分。主要工作是为了隔离ETL任务和实时任务(spark streaming或flink作业)。新的实时集群，只有计算资源，没有过多的存储。所以，问题就抽象成：计算资源隔离，存储资源共享（hdfs）问题。当时也做了简单的调研。最终采用了最快最直接的方式实现了。具体细节见：<a href="http://alanzhang.me/2019/03/15/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96%E5%BF%83%E9%85%B8%E5%8E%86%E7%A8%8B/#more">集群优化心酸历程</a></p>
 <p>有大半年没关注alluxio了，看了看官网。稳定版本已经从之前的<code>1.8.1</code>到了<code>2.1.0</code>，可见社区也是很活跃的。然后看到出了一本书《Alluxio：大数据统一存储原理与实践》。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/12/Alluxio_%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%BB%9F%E4%B8%80%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5.jpg" alt="Alluxio：大数据统一存储原理与实践"></p>
 <p>于是，买了一本拜读拜读。书不厚，大概花了一下午，简单过了下，有些章节泛读（或跳过）。将一些需要进一步探索的章节输出脑图。<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2019/12/alluxio.jpg" alt="脑图"></p>
 <p>整个书大概可以分3部分，一部分是原理性描述的（也是后续需要重点研究的）；另一部分，描述如何集成部署，这块可以放在以后读，和官网的文档对比了下，差不多（可以跳过）。其余部分，就是一些实践案例分享，一些场景分析（可以泛读，看看自己是否面临类似的问题）。</p>
@@ -462,11 +462,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
             <a href="/tags/2019/" rel="tag"># 2019</a>
           
             <a href="/tags/Alluxio/" rel="tag"># Alluxio</a>
-          
-            <a href="/tags/大数据/" rel="tag"># 大数据</a>
           
         </div>
       
