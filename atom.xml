@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2020-01-01T13:19:16.735Z</updated>
+  <updated>2020-04-01T14:44:21.061Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -15,6 +15,39 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一次线上问题引发的思考</title>
+    <link href="http://alanzhang.me/2020/04/01/%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/"/>
+    <id>http://alanzhang.me/2020/04/01/一次线上问题引发的思考/</id>
+    <published>2020-04-01T14:31:39.000Z</published>
+    <updated>2020-04-01T14:44:21.061Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>某一天，突然一个导入任务的merge操作出现长时间运行。由原来1h执行完成的，延长到10h。</p><p>对比yarn 信息，如下示：</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2020/04/24.png" alt></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2020/04/23.png" alt></p><p>对比发现，Map数和Reduce都有所减少。</p><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>查看表文件发现前一天的分区表文件数不一致。<br>23分区只有1个文件（大小为800多MB；22号有200+个文件，每个文件40多MB）</p><p>这样算起来，文件大小几乎翻了10倍，实际数据相等。</p><p>很奇怪，哪里的问题？</p><a id="more"></a><h3 id="文件压缩"><a href="#文件压缩" class="headerlink" title="文件压缩"></a>文件压缩</h3><p>看了下表格式为ORC格式。列式存储，在数据存储上进行了优化。</p><p>一组表各种格式，压缩后对比<br><img src="https://github.com/alanzhang211/blog-image/raw/master/2020/04/orc.png" alt="orc"></p><p>ORC的压缩比最低。</p><blockquote><p>针对列式存储，如果同构数据（相同的数据）比较集中，那么压缩起来就能达到很好效果。</p></blockquote><p>这里就产生了一种猜想：可能导入表存在大量的同构数据，导致压缩比有这么大的差距。</p><hr><p>下面对猜想进行数据验证。</p><h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><h4 id="实验准备"><a href="#实验准备" class="headerlink" title="实验准备"></a>实验准备</h4><p>分别制造2张表，模拟线上数据。<br>一张单个文件的表<code>ods.t_single_file</code>(2020-03-30的分区只有一个文件)。<br>另一个含有多个文件的表<code>ods.t_multiple_file</code>(2020-03-30的分区有多个文件)。</p><h4 id="实验1"><a href="#实验1" class="headerlink" title="实验1"></a>实验1</h4><h5 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h5><p>两个表重新导入到不经过压缩的text表。</p><h5 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h5><p>text表存储大小一致。</p><h5 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h5><p>分别创建2张存储格式是text的测试表。<code>userdb.t_single_file_text</code>、<code>userdb.t_multiple_file_text</code></p><h5 id="处理代码"><a href="#处理代码" class="headerlink" title="处理代码"></a>处理代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">set hive.exec.compress.output=false; -- 不启用压缩</span><br><span class="line">INSERT OVERWRITE TABLE userdb.t_single_file_text PARTITION(dt = &apos;2020-03-30&apos;)</span><br><span class="line">select</span><br><span class="line">`AutoId`,</span><br><span class="line">`gmt51_create`,</span><br><span class="line">`gmt51_modify`,</span><br><span class="line">`BundleId`,</span><br><span class="line">`Platform`,</span><br><span class="line">`Date`,</span><br><span class="line">`Source`,</span><br><span class="line">`Count`</span><br><span class="line">from</span><br><span class="line">ods.t_single_file</span><br><span class="line">where dt = &apos;2020-03-30&apos;</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set hive.exec.compress.output=false; -- 不启用压缩</span><br><span class="line">INSERT OVERWRITE TABLE userdb.t_multiple_file_text PARTITION(dt = &apos;2020-03-30&apos;)</span><br><span class="line">select</span><br><span class="line">`AutoId`,</span><br><span class="line">`gmt51_create`,</span><br><span class="line">`gmt51_modify`,</span><br><span class="line">`BundleId`,</span><br><span class="line">`Platform`,</span><br><span class="line">`Date`,</span><br><span class="line">`Source`,</span><br><span class="line">`Count`</span><br><span class="line">from</span><br><span class="line">ods.t_multiple_file</span><br><span class="line">where dt = &apos;2020-03-30&apos;</span><br><span class="line">;</span><br></pre></td></tr></table></figure><h5 id="实验数据"><a href="#实验数据" class="headerlink" title="实验数据"></a>实验数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_text</span><br><span class="line">368.4 G  1.1 T  hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_text/dt=2020-03-30</span><br><span class="line">-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_text</span><br><span class="line">368.4 G  1.1 T  hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_text/dt=2020-03-30</span><br></pre></td></tr></table></figure><h5 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h5><p>数据存储大小一致，符合预期。</p><h4 id="实验2"><a href="#实验2" class="headerlink" title="实验2"></a>实验2</h4><h5 id="目的-1"><a href="#目的-1" class="headerlink" title="目的"></a>目的</h5><p>两个表重新导入到默认压缩的orc表；并将数据按照所有字段进行排序（保证相同的数据靠在一起）。</p><h5 id="预期-1"><a href="#预期-1" class="headerlink" title="预期"></a>预期</h5><p>orc表存储大小一致，并且存储相对正常写入的表更小。</p><h5 id="准备-1"><a href="#准备-1" class="headerlink" title="准备"></a>准备</h5><p>分别创建2张存储格式是orc的测试表。<code>userdb.t_single_file_orc</code>、<code>userdb.t_multiple_file_orc</code></p><h5 id="处理代码-1"><a href="#处理代码-1" class="headerlink" title="处理代码"></a>处理代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">set hive.exec.compress.output=false; -- 不启用压缩</span><br><span class="line">INSERT OVERWRITE TABLE userdb.t_single_file_orc PARTITION(dt = &apos;2020-03-30&apos;)</span><br><span class="line">select</span><br><span class="line">`AutoId`,</span><br><span class="line">`gmt51_create`,</span><br><span class="line">`gmt51_modify`,</span><br><span class="line">`BundleId`,</span><br><span class="line">`Platform`,</span><br><span class="line">`Date`,</span><br><span class="line">`Source`,</span><br><span class="line">`Count`</span><br><span class="line">from</span><br><span class="line">ods.t_single_file</span><br><span class="line">where dt = &apos;2020-03-30&apos;</span><br><span class="line">order by BundleId,Platform,Date,Source,Count,gmt51_create,gmt51_modify</span><br><span class="line">;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set hive.exec.compress.output=false; -- 不启用压缩</span><br><span class="line">INSERT OVERWRITE TABLE userdb.t_multiple_file_orc PARTITION(dt = &apos;2020-03-30&apos;)</span><br><span class="line">select</span><br><span class="line">`AutoId`,</span><br><span class="line">`gmt51_create`,</span><br><span class="line">`gmt51_modify`,</span><br><span class="line">`BundleId`,</span><br><span class="line">`Platform`,</span><br><span class="line">`Date`,</span><br><span class="line">`Source`,</span><br><span class="line">`Count`</span><br><span class="line">from</span><br><span class="line">ods.t_multiple_file</span><br><span class="line">where dt = &apos;2020-03-30&apos;</span><br><span class="line">order by BundleId,Platform,Date,Source,Count,gmt51_create,gmt51_modify</span><br><span class="line">;</span><br></pre></td></tr></table></figure><h5 id="实验数据-1"><a href="#实验数据-1" class="headerlink" title="实验数据"></a>实验数据</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_orc</span><br><span class="line">7.5 G  22.5 G  hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_orc/dt=2020-03-30</span><br><span class="line">-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_orc</span><br><span class="line">7.5 G  22.5 G  hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_orc/dt=2020-03-30</span><br></pre></td></tr></table></figure><h5 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h5><p>数据存储大小一致。</p><p>对比原表<code>ods.t_multiple_file</code></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/ods.db/t_multiple_file</span><br><span class="line">9.6 G  28.7 G  hdfs://nameservice1/user/hive/warehouse/ods.db/t_multiple_file/dt=2020-03-30</span><br></pre></td></tr></table></figure><p>由9.6G降到7.5G，所以，同构数据一起写入orc表可以获得更好的压缩比。</p><h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ol><li>orc格式的表在数据存储优化上有很大提升。</li><li>对同构数据较多的表，将相似的数据集中写入，同样可以进一步优化压缩比。</li></ol><blockquote><p>本文主要从线上的一个现象，对公认的结论做了数据验证对比。</p></blockquote><h3 id="题外"><a href="#题外" class="headerlink" title="题外"></a>题外</h3><p>这个线上现象的另一个问题是Map，Reduce数量问题。这个主要就牵扯到MR任务的map task和reduce task切分问题上，感兴趣的同学可以自行搜索相关资料。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;某一天，突然一个导入任务的merge操作出现长时间运行。由原来1h执行完成的，延长到10h。&lt;/p&gt;
+&lt;p&gt;对比yarn 信息，如下示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/alanzhang211/blog-image/raw/master/2020/04/24.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/alanzhang211/blog-image/raw/master/2020/04/23.png&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;对比发现，Map数和Reduce都有所减少。&lt;/p&gt;
+&lt;h2 id=&quot;分析&quot;&gt;&lt;a href=&quot;#分析&quot; class=&quot;headerlink&quot; title=&quot;分析&quot;&gt;&lt;/a&gt;分析&lt;/h2&gt;&lt;p&gt;查看表文件发现前一天的分区表文件数不一致。&lt;br&gt;23分区只有1个文件（大小为800多MB；22号有200+个文件，每个文件40多MB）&lt;/p&gt;
+&lt;p&gt;这样算起来，文件大小几乎翻了10倍，实际数据相等。&lt;/p&gt;
+&lt;p&gt;很奇怪，哪里的问题？&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
+    
+      <category term="表压缩" scheme="http://alanzhang.me/tags/%E8%A1%A8%E5%8E%8B%E7%BC%A9/"/>
+    
+  </entry>
   
   <entry>
     <title>理理自己的2019</title>
@@ -60,11 +93,11 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="Alluxio" scheme="http://alanzhang.me/tags/Alluxio/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -91,9 +124,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="spark" scheme="http://alanzhang.me/tags/spark/"/>
     
@@ -229,9 +262,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="集群优化" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96/"/>
     
@@ -361,11 +394,11 @@
     
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -447,9 +480,9 @@
       <category term="户外运动" scheme="http://alanzhang.me/categories/%E6%88%B7%E5%A4%96%E8%BF%90%E5%8A%A8/"/>
     
     
-      <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
-    
       <category term="越野" scheme="http://alanzhang.me/tags/%E8%B6%8A%E9%87%8E/"/>
+    
+      <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
   </entry>
   
@@ -474,11 +507,11 @@
     
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -540,33 +573,6 @@
       <category term="数据库" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
       <category term="连接池" scheme="http://alanzhang.me/tags/%E8%BF%9E%E6%8E%A5%E6%B1%A0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>香港100华东区热身派对小记</title>
-    <link href="http://alanzhang.me/2017/12/18/%E9%A6%99%E6%B8%AF100%E5%8D%8E%E4%B8%9C%E5%8C%BA%E7%83%AD%E8%BA%AB%E6%B4%BE%E5%AF%B9%E5%B0%8F%E8%AE%B0/"/>
-    <id>http://alanzhang.me/2017/12/18/香港100华东区热身派对小记/</id>
-    <published>2017-12-18T06:46:28.000Z</published>
-    <updated>2019-02-26T15:14:20.413Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>周六，参加了华东区举办的HK100赛前分享会。作为一只，初入越野圈的菜鸟来说，也是去观摩大神的。流程大体：先来个热身，20km，1200多米的爬升的热身跑。实际跑下来，接近25km。然后，洗澡午餐。下午进行赛事分享。港百介绍，路线图分析。往届参赛人员经验分享。最后，是抽奖环节。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%B0%8F%E4%BA%BA.jpeg" alt="image"></p><a id="more"></a><h1 id="热身赛"><a href="#热身赛" class="headerlink" title="热身赛"></a>热身赛</h1><p><strong>线路图</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E7%83%AD%E8%BA%AB%E5%9B%BE.jpeg" alt="image"></p><p>大华山，五云山。这些，都是很多赛事要经过的地方。不过，杭州群山的线路。正跑，反跑，是不一样的感觉。有些线路，走过了。突然发现，似曾相识。群山上的路线也是纵横交错。当然，这几年下来，山上的野路少了。替代的是一级级的台阶。圈内都说，杭州的越野就是爬台阶。</p><p>这次，是陪将要参加港百的小伙伴一起来的。上次因为寒流来袭，未能完赛。这次也是去收复失地。在这里，祝愿安全完赛。有些比赛，如果没能完赛，对一个参赛选手打击还是挺大的。比如我，去年的维斯越野，由于之前髂胫疼<a href="http://iranshao.com/articles/itbs_1" target="_blank" rel="noopener">髂胫束综合征</a>，导致中途退赛，很遗憾。那么，今年再次参加维斯。没有伤痛，完赛。</p><p><strong>跑步</strong><br><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E8%B7%91%E6%AD%A5.jpeg" alt="image"></p><p>跑到中途，下雨。迷路还是有的。不过，山上跑起来还是很爽，就是有点冷。跟随的都是些要参加港百的人。实力不容小觑，我这个小跟班，也就在后面学习。</p><p>经过，4个小时左右，跑回到了终点。然后，将衣服换下，洗个澡。吃上热乎乎的咖喱肌肉饭，美滋滋。</p><p><strong>冲线</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%86%B2%E7%BA%BF.jpeg" alt="冲线"></p><p><strong>吃饭饭</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/WechatIMG30.jpeg" alt="吃饭饭"></p><h1 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h1><p>大概14点的样子，组织方开始进行港百分享。分享嘉宾杰哥（方正杰，港百锦英选手）。配合地图讲解了每个cp点，道路，补给，以及注意事项。当然，风景也是很美哒。美丽的海滩，山丘，城市夜景。</p><p><strong>分享</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/WechatIMG31.jpeg" alt="image"></p><p><strong>地图</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/WX20171217-201436.png" alt="hk地图"></p><p><strong>爬升图</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/elevation_profile.png" alt="image"></p><p><strong>景色</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E6%B5%B7%E6%BB%A9.jpeg" alt="hk景色"></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/timg.jpeg" alt="image"></p><p>分享完后，就是激动的抽奖环节。这次呢？来者人人有份。帽子，压缩衣，跑步T，袜子等。</p><p><strong>奖品</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%A5%96%E5%93%81.jpeg" alt="奖品"></p><p><strong>合影</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%90%88%E5%BD%B1.jpeg" alt="image"></p><h1 id="时间表"><a href="#时间表" class="headerlink" title="时间表"></a>时间表</h1><p>如果打算或即将参加香港100的同学，可以参考下列时间表。分配体力，调整状态，避免跑崩。</p><p><strong>小金人</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%B0%8F%E9%87%91%E4%BA%BA.jpg" alt="image"></p><p><strong>小银人</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%B0%8F%E9%93%B6%E4%BA%BA.jpg" alt="image"></p><p><strong>小铜人</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%B0%8F%E9%93%9C%E4%BA%BA.jpg" alt="image"></p><p>淡然，如果有实力跑个精英（每届只取前150名）。参考：</p><p><strong>精英</strong></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E9%87%91%E9%B9%B0.jpg" alt="image"></p><hr><p>上期推出“留言送药”活动。截止今天0点，点赞最多的读者诞生。谢谢大家的支持！</p><hr>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;序&quot;&gt;&lt;a href=&quot;#序&quot; class=&quot;headerlink&quot; title=&quot;序&quot;&gt;&lt;/a&gt;序&lt;/h1&gt;&lt;p&gt;周六，参加了华东区举办的HK100赛前分享会。作为一只，初入越野圈的菜鸟来说，也是去观摩大神的。流程大体：先来个热身，20km，1200多米的爬升的热身跑。实际跑下来，接近25km。然后，洗澡午餐。下午进行赛事分享。港百介绍，路线图分析。往届参赛人员经验分享。最后，是抽奖环节。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://github.com/alanzhang211/blog-image/raw/master/%EF%BC%8F2017/12/hk100/%E5%B0%8F%E4%BA%BA.jpeg&quot; alt=&quot;image&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="户外运动" scheme="http://alanzhang.me/categories/%E6%88%B7%E5%A4%96%E8%BF%90%E5%8A%A8/"/>
-    
-    
-      <category term="2017" scheme="http://alanzhang.me/tags/2017/"/>
-    
-      <category term="户外运动" scheme="http://alanzhang.me/tags/%E6%88%B7%E5%A4%96%E8%BF%90%E5%8A%A8/"/>
-    
-      <category term="港百" scheme="http://alanzhang.me/tags/%E6%B8%AF%E7%99%BE/"/>
     
   </entry>
   

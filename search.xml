@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[一次线上问题引发的思考]]></title>
+    <url>%2F2020%2F04%2F01%2F%E4%B8%80%E6%AC%A1%E7%BA%BF%E4%B8%8A%E9%97%AE%E9%A2%98%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83%2F</url>
+    <content type="text"><![CDATA[背景某一天，突然一个导入任务的merge操作出现长时间运行。由原来1h执行完成的，延长到10h。 对比yarn 信息，如下示： 对比发现，Map数和Reduce都有所减少。 分析查看表文件发现前一天的分区表文件数不一致。23分区只有1个文件（大小为800多MB；22号有200+个文件，每个文件40多MB） 这样算起来，文件大小几乎翻了10倍，实际数据相等。 很奇怪，哪里的问题？ 文件压缩看了下表格式为ORC格式。列式存储，在数据存储上进行了优化。 一组表各种格式，压缩后对比 ORC的压缩比最低。 针对列式存储，如果同构数据（相同的数据）比较集中，那么压缩起来就能达到很好效果。 这里就产生了一种猜想：可能导入表存在大量的同构数据，导致压缩比有这么大的差距。 下面对猜想进行数据验证。 实验实验准备分别制造2张表，模拟线上数据。一张单个文件的表ods.t_single_file(2020-03-30的分区只有一个文件)。另一个含有多个文件的表ods.t_multiple_file(2020-03-30的分区有多个文件)。 实验1目的两个表重新导入到不经过压缩的text表。 预期text表存储大小一致。 准备分别创建2张存储格式是text的测试表。userdb.t_single_file_text、userdb.t_multiple_file_text 处理代码1234567891011121314151617181920212223242526272829303132set hive.exec.compress.output=false; -- 不启用压缩INSERT OVERWRITE TABLE userdb.t_single_file_text PARTITION(dt = &apos;2020-03-30&apos;)select`AutoId`,`gmt51_create`,`gmt51_modify`,`BundleId`,`Platform`,`Date`,`Source`,`Count`fromods.t_single_filewhere dt = &apos;2020-03-30&apos;;set hive.exec.compress.output=false; -- 不启用压缩INSERT OVERWRITE TABLE userdb.t_multiple_file_text PARTITION(dt = &apos;2020-03-30&apos;)select`AutoId`,`gmt51_create`,`gmt51_modify`,`BundleId`,`Platform`,`Date`,`Source`,`Count`fromods.t_multiple_filewhere dt = &apos;2020-03-30&apos;; 实验数据1234-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_text368.4 G 1.1 T hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_text/dt=2020-03-30-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_text368.4 G 1.1 T hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_text/dt=2020-03-30 实验结果数据存储大小一致，符合预期。 实验2目的两个表重新导入到默认压缩的orc表；并将数据按照所有字段进行排序（保证相同的数据靠在一起）。 预期orc表存储大小一致，并且存储相对正常写入的表更小。 准备分别创建2张存储格式是orc的测试表。userdb.t_single_file_orc、userdb.t_multiple_file_orc 处理代码12345678910111213141516171819202122232425262728293031323334set hive.exec.compress.output=false; -- 不启用压缩INSERT OVERWRITE TABLE userdb.t_single_file_orc PARTITION(dt = &apos;2020-03-30&apos;)select`AutoId`,`gmt51_create`,`gmt51_modify`,`BundleId`,`Platform`,`Date`,`Source`,`Count`fromods.t_single_filewhere dt = &apos;2020-03-30&apos;order by BundleId,Platform,Date,Source,Count,gmt51_create,gmt51_modify;set hive.exec.compress.output=false; -- 不启用压缩INSERT OVERWRITE TABLE userdb.t_multiple_file_orc PARTITION(dt = &apos;2020-03-30&apos;)select`AutoId`,`gmt51_create`,`gmt51_modify`,`BundleId`,`Platform`,`Date`,`Source`,`Count`fromods.t_multiple_filewhere dt = &apos;2020-03-30&apos;order by BundleId,Platform,Date,Source,Count,gmt51_create,gmt51_modify; 实验数据1234-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_orc7.5 G 22.5 G hdfs://nameservice1/user/hive/warehouse/userdb.db/t_single_file_orc/dt=2020-03-30-bash-4.1$ hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_orc7.5 G 22.5 G hdfs://nameservice1/user/hive/warehouse/userdb.db/t_multiple_file_orc/dt=2020-03-30 实验结果数据存储大小一致。 对比原表ods.t_multiple_file 12hadoop fs -du -h hdfs://nameservice1/user/hive/warehouse/ods.db/t_multiple_file9.6 G 28.7 G hdfs://nameservice1/user/hive/warehouse/ods.db/t_multiple_file/dt=2020-03-30 由9.6G降到7.5G，所以，同构数据一起写入orc表可以获得更好的压缩比。 结论 orc格式的表在数据存储优化上有很大提升。 对同构数据较多的表，将相似的数据集中写入，同样可以进一步优化压缩比。 本文主要从线上的一个现象，对公认的结论做了数据验证对比。 题外这个线上现象的另一个问题是Map，Reduce数量问题。这个主要就牵扯到MR任务的map task和reduce task切分问题上，感兴趣的同学可以自行搜索相关资料。]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>2020</tag>
+        <tag>表压缩</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[理理自己的2019]]></title>
     <url>%2F2020%2F01%2F01%2F%E7%90%86%E7%90%86%E8%87%AA%E5%B7%B1%E7%9A%842019%2F</url>
     <content type="text"><![CDATA[今年的总结从何说起？元旦一天假期，本来想不写了。想想还是将这个习惯传承下去的好。不做深层次的分析，只是个流水总结。 19总结按照惯例，总结之前先看看上一年给自己“提纲”-2018の自己中末尾提到。 打分 公众号（70分）：基本平均下来一月一篇吧。包括生活，工作，学习总结等。如果您感兴趣，可扫码关注文末公众号，期待您的莅临。不过，专栏一项并没能完成，想写专栏确实需要更多的深度探索，继续努力。 读书笔记输出（60分）：读书笔记而言，可以移步github读书笔记。多数是使用思维导图的方式产出，边读书，边画图效率很高，也方便日后温故。 其他技能（50分）：了解了金融和理财相关，理财方面大部分在指数定投这块；了解了信用卡一些功能。 健康方面（40分）：近3年，运动这块分数越来越低了。今年只跑了个 梦想小镇半马，真的是跑不动了，和PB相比，退步了近半小时。感觉还是15，16年是跑步黄金时期。当然，事事都有两面性。不过，健康 重中之重，还是要重视。 出游（95分）：感觉是完成度最高的一项。主要发生在上半年，从春节开始（第一次春节没回家过年）到五一。去了一直想去的日本，也算是完成了一个小小心愿（期间囧途，坎坷，也是人生阅历的提升）。然后就是济州岛，越南。相关游记也可以关注文末的公众号查看。 个人情感（30分）：这里要感谢亲朋好友平时的帮助；这种事情还是要依靠自己，继续努力吧。 概括还是感觉没有很出彩的地方，19年过去了，给人的感觉有点疲惫。不知道是不是年纪上来的缘故。每天思考的东西多了，感觉压力大了。很庆幸的是发量还让人满意。 20展望 健康：锻炼，至少参加一次正规的跑步比赛。 公众号：保持公众号一月一篇的产出量，努力能够形成一个专栏体系（工作，生活，学习等题材不限）。写的东西能够被认可固然很好；但最终还是一句话：N年后，能够通过搜索引擎找到它。 工作技能方面：领域做专，毕竟年纪大了，再没有点核心竞争力的话，真的要回家种地了；读书笔记，每月产出读书总结。定个年度量化的小目标：12本。 生活：希望能够在杭州“安定”下来，有个自己的小屋。 出游：能够去一趟除了亚洲之外的其他国家玩一趟，其他都算是“超量”。 其他：能够形成自己的一套理财实践路线；给自己买一个大件犒劳自己(具体是什么还没定，可能是一台sony的微单吧)。]]></content>
@@ -20,9 +33,9 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
         <tag>Alluxio</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -33,8 +46,8 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
+        <tag>大数据</tag>
         <tag>spark</tag>
       </tags>
   </entry>
@@ -95,8 +108,8 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
+        <tag>大数据</tag>
         <tag>集群优化</tag>
       </tags>
   </entry>
@@ -158,9 +171,9 @@
       </categories>
       <tags>
         <tag>2018</tag>
+        <tag>大数据</tag>
         <tag>数据同步</tag>
         <tag>DataX</tag>
-        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -197,8 +210,8 @@
         <category>户外运动</category>
       </categories>
       <tags>
-        <tag>2018</tag>
         <tag>越野</tag>
+        <tag>2018</tag>
       </tags>
   </entry>
   <entry>
@@ -210,9 +223,9 @@
       </categories>
       <tags>
         <tag>2018</tag>
+        <tag>大数据</tag>
         <tag>数据同步</tag>
         <tag>DataX</tag>
-        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -546,8 +559,8 @@
         <category>总结</category>
       </categories>
       <tags>
-        <tag>总结</tag>
         <tag>2016</tag>
+        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
@@ -644,7 +657,6 @@
     <url>%2F2016%2F11%2F17%2F%E3%80%8ARedis%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%2F</url>
     <content type="text"><![CDATA[百度网盘资源下载 简介 官方网站 官方下载 可以根据需要下载不同版本。windows版 可视化工具RedisClient 特性存储结构 remote dictionary server的简称。字典结构存储数据。 通过tcp协议获取内容 支持键值的数据类型 字符串 散列类型 列表类型 集合类型 有序集合类型 对不同的数据类型提供了方便的操作。 内存存储与持久化将存储在内存中的数据持久化到硬盘中 功能缓存，队列系统。 缓存 设置键的生存时间，过期的会自动删除。此特性实现redis缓存效果。（另一个缓存系统Memcached） 性能上:redis是单线程模式；Memcached支持多线程。 作为缓存，设置最大内存空间，超过空间后会按照一定的规则淘汰不需要的键。 实现队列 redis的列表类型实现优先级队列；支持阻塞读取。如：redis实现任务队列 支持“发布/订阅”消息模式。如：发布/订阅 简单稳定准备安装（待完善…） 启动停止 启动命令行 直接启动，默认端口6379 1redis-server ，自定义端口启动 1redis-server -- port 6380 批处理windows windows下新建startup.bat 1redis-server redis.windows.conf linux待续… 停止 命令行1redis-cli shutdown 强行停止会导致数据丢失。 Redis命令行发送命令通过redis-cli 向Redis发送命令有两种方式 将命令作为redis-cli的参数 ping:测试客户端与redis的连接是否正常，连接正常返回pong 不带参数运行redis-cli，进入交互模式。 命令返回值 状态恢复 错误回复：回复以(error)开头 整数回复 字符串回复 多行字符回复 配置 通过配置文件进行参数配置 1redis-server /path/to/redis.conf 通过启动参数传递同名的配置选项覆盖文件中相应的参数1redis-server /path/to/redis.conf --loglevel warning 使用config set命令在不重启redis的情况下动态修改redis配置。 1config set loglevel warning 并非所有，命令都支持config set 使用config get 获取配置信息 1config get loglevel 多数据库为每个词典建立独立的数据库。 每个数据库都是以一个0开始递增的数字命名。 Redis默认支持16个数据库，可以通过配置参数database修改。 客户端默认选择0号数据库进行连接，可以使用select命令更换。 Redis不支持自定义数据库名称 Redis不支持为每个数据库设置不同的访问密码。 多个数据库并不是完全隔离的，使用flushall命令清空Redis所有的数据库数据。 建议不同的应用使用不同的Redis实例而非同一个Reids的不同数据库。 入门字符串类型命令赋值/取值12set key valueget key 递增数字1incr key 使整型的key的value递增 当操作的key不存在时，会默认值为0，每次递增1. Redis命令都是原子的 散列类型 字段值只能是字符串 不能嵌套其他数据类型 散列类型适合存储对象 数据是以二维表的形式存储的 可以自由的为任何key增加字段 命令赋值/取值12hset key field vaulehget key field hset 插入数据返回1；更新返回0 设置多个值1hmset key field1 vaule1 field2 vaule2 获取多个值1hmget key field1 field2 获取整个对象属性1hgetall key 判断字段是否存在1hexists key field 存在返回1；否则返回0（key不存在返回0）。 当字段不存在时赋值 hsetnx不支执行任何操作 增加数字1hincrby key field increment 使字段值增加指定的整数；如果不存在会默认增加指定field字段。 删除字段1hdel key field [field ...] 返回值为被删除的字段个数 列表类型 Redis借助列表可以作为队列 命令向列表两端增加元素12lpush key value[value...]rpush key value[value...] 从列表两端弹出元素12lpop keyrpop key 获取类表中的元素个数1llen key llen的时间复杂度是O(1);使用InnoDB存储引擎的mysql会遍历整个数据表赶回条目信息。 获的列表片段1lrange key start stop 不会删除片段 支持负索引 删除列表指定的值1lren key count value 删除列表前count个数值的value的元素。返回值是实际删除的个数。 集合类型命令增加/删除元素12sadd key member [member...]srem key member [member...] 获取集合中的元素1smembers key 判断元素是否在集合中1sismember key member 判断一个元素是否在集合中时间复杂度O(1) 集合间运算123sdiff key [key...]sinter key [key...]sunion key [key...] 有序集合每个元素都关联一个分数。 命令增加元素1zadd key score member [score member ...] 获取元素的分数1zscore key member 获取排名在指定范围的元素1zrange key start stop [withscore] 时间复杂度O(logn + m)，其中n为有序集合的基数，m为返回元素的个数。 分数相同，Redis按照字典顺序排序 进阶事务错误处理1multi Redis不支持事务回滚 watch命令监控的一个或多个key，一但其中一个key被修改或删除，之后的事务将不会执行。监控一致执行到exec 不想执行事务中的命令可以使用unwatch取消监控。 生存时间命令1expire key seconds 单位:秒。 expire单位是秒，pexpire是毫秒 实现访问频率限制eg：限制每个ip每分钟访问次数 增加事务处理 使用列表记录每次的访问时间，访问次数超过限制次数时，将列表中 时间差=最晚时间-最早时间如果时间差&lt;1min,表示超过限制；否则将当前时间加入，同时删除最早时间。 实现缓存 服务器内存有限，缓存时间过长会导致Redis内存会占满。 如果缓存时间过段，命中率过低，起不到缓存的效果。 解决方案：限制最大缓存；使用一定的规则进行淘汰。（Redis只作为缓存的时候使用。） 排序有序结合 常见的场景是大数据排序 sort命令 可以对列表、集合、有序集合的key进行排序 by参数依据by参数进行排序 store参数 使用store，结果保存在sort.result中。 性能优化 减少键排序中的元素个数 使用limit限制返回个数 如果排序数量较大，使用store进行缓存 消息通知任务队列 松耦合 易扩展消费者 Redis实现队列 列表实现队列 BRPOP 命令实现阻塞模式 优先队列1BRPOP key [key...] timeout 发布/订阅发布消息1publish channel message 返回值表示接收到这条消息的订阅者数量 发不出去的消息不会被持久化 同时订阅多个通道1subscribe channel [channel...] subscribe：表示订阅成功返回信息，第二个值是通道的名称，第三个值是当前客户订阅的通道数量 message：表示接收到的消息。第二个值表示通道名称，第三个值表示消息内容 unsubscribe：表示成功取消订阅某个通道；第二个值表示通道名称，第三个值表示当天订阅的通道数量，此值为0表示客户端退出订阅状态。 管道 通道减少了客户端和Redis的通信次数 Redis提供了对通道的支持；可以一次性返回结果 节省空间精简键名和键值内部编码优化 查看键的编码1object encoding key 实践（略）]]></content>
       <categories>
-        <category>读书笔记</category>
         <category>Redis</category>
       </categories>
       <tags>
