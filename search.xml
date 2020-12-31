@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[20的20]]></title>
+    <url>%2F2020%2F12%2F31%2F20%E7%9A%8420%2F</url>
+    <content type="text"><![CDATA[序2020注定是个不平凡的一年。又到了跨年的时刻，总感觉不写点什么对不起这个“难忘”的2020。 依旧延续传统吧，总结过往，展望未来。至少在20年后，看看这些，我觉得还是挺感动的。所以，窝在被窝（这两天，杭州零下，确实有点冷）开始更新停滞很久的blog。 过往2020首先，还是回顾去年跨年的目标：理理自己的2019 打分（0-100） 健康（60分）：没有生过病，但是参加比赛锻炼的时间少了。上半年基本没动（虽然是“新冠肺炎”，但不能给自己找借口）；下半年开始慢慢的进行户外活动。爬了几次山，最远的也就是富阳-杏梅尖（5年前刚开始玩户外的时候爬过）算是重温故地吧。今年体重突破了140（以往也就在134-136徘徊）。这里要“感谢”过年时候一个多月的肥宅生活。 公众号（40分）：基本是上半年更新，下半年自己也没有静下心好好梳理自己，这里做的不好。 工作技能方面（50分）：努力靠拢，但是换了工作还是没能到达P7砖家的水平。这个也是未来一年为之奋斗的目标。读书方面，上半年看的比较多。下半年基本没怎么系统看过，读书笔记也是比较散。所以，这块要重点披露。 生活（90分）：我想这应是今年最令人激动的事了。下半年摇到了房子，虽然不大，但是也总算有个家（2021.6交付，很激动）。在此，感谢过程中帮助过我的亲人朋友。 出游（10分）：今年可以用一个词来形容“困住”。没有出过浙江，更别说出国了。疫情影响还是蛮大的。 感情面（30分）：接触过一些朋友介绍，目前还是一个人吧，还是没找到那个她。这是个未来核心KPI。 工作（70分）：今年是我的第3次换工作，进入了“A”家，希望这次能够达到5年。依旧从事自己喜欢的领域-大数据。一切之前的向往成了现实，过程虽然坎坷，但是至少来到了这里。更多地需要自己去主动学习。这个也是未来2021年主攻目标。 未来2021 健康：依旧是首要，保持健康，持续锻炼。希望可以再次回到“赛场”。 技术：还是要做专，主动学习，多和业界大牛们交流。认识不同公司的领域专家和小伙伴。多参加线下培训，输出自己的观点。和他人多交流。定个目标能到P7（虽然，公司晋升title可能比较困难）。 知识输出：同样还是要有所输出，这里感谢那些还在坚守我公众号的朋友。有些愧疚，半年没怎么输出，你们依旧在。明年，一定输出一些更有营养的文章。 读书：还是12本吧。2020年毛估估应该至少12本以上（实体书+电子书）。有的泛读，有的细读，也看了很多公开课（极客时间）。读书还是要输出，依旧读书笔记+脑图的方式输出。 生活：希望2021国内和国际环境好起来，生活质量好起来。外加，个人情感。核心KPI是找到“她”。 出游：如果环境允许，还是希望能出国一次：想去新西兰。 其他：自由发挥吧，希望可能有惊喜～]]></content>
+      <categories>
+        <category>总结</category>
+      </categories>
+      <tags>
+        <tag>总结</tag>
+        <tag>2020</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[orc小文件合并趣谈]]></title>
     <url>%2F2020%2F04%2F17%2Forc%E5%B0%8F%E6%96%87%E4%BB%B6%E5%90%88%E5%B9%B6%E8%B6%A3%E8%B0%88%2F</url>
     <content type="text"><![CDATA[前言这周做了个事情趁热沉淀一下。问题很明确治理小文件。问题由来，要追溯到去年，集群治理了。之前做到存储和计算的管理，后续做了简单hdfs画像（其中，就有小文件趋势监控）。最近，集群中namenode压力有所显现。于是，针对小文件多的目录进行了排查和治理。进而，有了今天的这个主题ORC小文件合并趣谈。 核心问题这里，首先治理的是实时导入数据的目录。这里增量数据采用SparkSQL以动态分区增量写入的方式。众所周知，spark在处理时，每个task都会写入一个文件（如果task处理的数据，包含n个分区的数据，就会产生n个文件）。进而，在并行度高的情况下，导致对应增量分区文件很多（存储并不大）。 在存储治理中，平台统一要求将hive表的格式向orc格式靠拢。orc的表在存储和查询上都有很好的提升。所以，这个问题就间接的转化为解决orc小文件问题。 解决问题解决问题，就先从根源入手，即sparksql小文件产生源头。在spark 2.4 版本中提供了hit的方式（https://issues.apache.org/jira/browse/SPARK-24940）。 处理上，采用程序升级和定时合并的方式。本文，主要介绍如何定时合并orc文件。 措施方案对比经过分析，总结了两种方式。 使用ORC原生DDL方式合并小文件功能。 ALTER TABLE table_name [PARTITION partition_spec] CONCATENATE; 附：hive-ddl 优点： 原生支持，开发量小。 避免了数据的解压、解码过程。 缺点： 不够优雅，无法指定最终合并的文件数，需要多次执行。 产生一个hivesql处理，中间过程分区目录会产生.staging-hive*的文件。 比较耗时。 重新造轮子，实现文件合并功能。 优点： 省时间，直接操作hdfs，省去了hive处理过程。 可以控制最终文件数和大小。 缺点： 需要一定的开发量。 合并后，hive元数据需要主动去刷新处理（直接操作hdfs文件，无法同步到hive元数据）这点很重要。 实现流程图 主线程main从元数据库MetaStore获取需要合并处理（文件数大于1）的分区信息。 根据分工不同，使用两个线程池完成异步处理。 mergeHdfsThreadPool管理合并orc格式的hdfs线程。 flushMetastoreThreadPool管理统计合并分区的元数据信息线程，回馈到元数据库MetaStore中。 核心代码实现ORC合并这里，参照官网Using Core Java。方式，实现简单的文件合并处理。 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788/** * 合并orc文件 * @param fileDir 需要合并的分区目录 * @throws Exception */public static void orcFileRollUp(String fileDir) throws Exception &#123; if (StringUtils.isBlank(fileDir)) &#123; throw new Exception(&quot;fileDir is null&quot;); &#125; fileDir = fileDir.replace(HDFS_HOST,&quot;&quot;); Path srcPath = new Path(fileDir); if (!fs.exists(srcPath)) &#123; throw new Exception(&quot;fileDir is not exists&quot;); &#125; if (!fs.isDirectory(srcPath)) &#123; throw new Exception(&quot;fileDir is not directory&quot;); &#125; FileStatus[] files = fs.listStatus(srcPath); try &#123; TypeDescription schema = getSchema(files); if (schema != null) &#123; //删除merge.working临时目录 String outFile = fileDir + File.separator + MARGE_FILE_NAME; Path outMergeFilePath=null; try &#123; outMergeFilePath = new Path(outFile); if (fs.exists(outMergeFilePath)) &#123; fs.delete(outMergeFilePath, false); &#125; &#125; catch (FileNotFoundException e) &#123; &#125; Writer writer = OrcFile.createWriter(outMergeFilePath, OrcFile.writerOptions(fs.getConf()).setSchema(schema)); List&lt;Path&gt; delSrcPathList = new ArrayList&lt;&gt;(); for (FileStatus file : files) &#123; String filePath = file.getPath().toString(); Path srcPathTmp = new Path(filePath); Reader reader = OrcFile.createReader(srcPathTmp, OrcFile.readerOptions(fs.getConf())); VectorizedRowBatch batch = reader.getSchema().createRowBatch(); RecordReader rows = reader.rows(); while (rows.nextBatch(batch)) &#123; if (batch != null) &#123; writer.addRowBatch(batch); &#125; &#125; rows.close(); delSrcPathList.add(srcPathTmp); &#125; writer.close(); //处理合并文件 outFile = fs.getFileStatus(outMergeFilePath).getPath().getName(); if (outFile.endsWith(&quot;.working&quot;)) &#123; int lastIndexOf = outFile.lastIndexOf(&quot;.working&quot;); outFile = outFile.substring(0, lastIndexOf); &#125; Path parent = outMergeFilePath.getParent(); Path newPath = null; //移除上一次merge文件 try &#123; newPath = new Path(parent, outFile); Path oldMergeFile = new Path(fileDir + File.separator + outFile); if (fs.exists(oldMergeFile)) &#123; fs.delete(oldMergeFile,false); &#125; fs.rename(outMergeFilePath, newPath); &#125; catch (FileNotFoundException e) &#123; &#125; //删除srcPath for (Path path : delSrcPathList) &#123; if (path.getName().endsWith(&quot;merge&quot;)) &#123; continue; &#125; fs.delete(path, false); &#125; LOGGER.info(&quot;合并分区&#123;&#125;成功,合并文件=&#123;&#125;&quot;, fileDir,newPath); &#125; &#125; catch (Exception e) &#123; LOGGER.error(&quot;合并分区&#123;&#125;失败=&#123;&#125;&quot;, fileDir,ExceptionUtils.getFullStackTrace(e)); throw new Exception(ExceptionUtils.getFullStackTrace(e)); &#125;&#125; 文件合并会先写到.merge.working文件中，合并完成后，再将.merge.working重命名为正式文件.merge结尾。最后，将之前的小文件删除。 重新统计分区元数据采用hive原生的统计方式。StatsDev。 其他注意点 flushMetastoreThreadPool要在mergeHdfsThreadPool内的线程结束后执行。如何知道一个线程池内所有线程执行完毕？线程池的isTerminated，当所有线程都关闭时，会返回true。 123456while(true)&#123; if(mergeHdfsThreadPool.isTerminated())&#123; //转交flushMetastoreThreadPool执行 break; &#125; &#125; 结束寥寥数笔，欢迎交流。]]></content>
@@ -21,8 +33,8 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2020</tag>
+        <tag>大数据</tag>
         <tag>表压缩</tag>
       </tags>
   </entry>
@@ -46,9 +58,9 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
         <tag>Alluxio</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -59,8 +71,8 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
+        <tag>大数据</tag>
         <tag>spark</tag>
       </tags>
   </entry>
@@ -121,8 +133,8 @@
         <category>大数据</category>
       </categories>
       <tags>
-        <tag>大数据</tag>
         <tag>2019</tag>
+        <tag>大数据</tag>
         <tag>集群优化</tag>
       </tags>
   </entry>
@@ -184,9 +196,9 @@
       </categories>
       <tags>
         <tag>2018</tag>
+        <tag>大数据</tag>
         <tag>数据同步</tag>
         <tag>DataX</tag>
-        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -236,9 +248,9 @@
       </categories>
       <tags>
         <tag>2018</tag>
+        <tag>大数据</tag>
         <tag>数据同步</tag>
         <tag>DataX</tag>
-        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -572,8 +584,8 @@
         <category>总结</category>
       </categories>
       <tags>
-        <tag>总结</tag>
         <tag>2016</tag>
+        <tag>总结</tag>
       </tags>
   </entry>
   <entry>
@@ -764,8 +776,8 @@
       </categories>
       <tags>
         <tag>2016</tag>
-        <tag>spring</tag>
         <tag>quartz</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
@@ -789,8 +801,8 @@
       </categories>
       <tags>
         <tag>2016</tag>
-        <tag>spring</tag>
         <tag>quartz</tag>
+        <tag>spring</tag>
       </tags>
   </entry>
   <entry>
