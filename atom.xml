@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2023-01-01T13:47:06.678Z</updated>
+  <updated>2024-07-09T09:33:35.046Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>生成式AI在各个领域的应用</title>
+    <link href="http://alanzhang.me/2024/07/09/%E7%94%9F%E6%88%90%E5%BC%8FAI%E5%9C%A8%E5%90%84%E4%B8%AA%E9%A2%86%E5%9F%9F%E7%9A%84%E5%BA%94%E7%94%A8/"/>
+    <id>http://alanzhang.me/2024/07/09/生成式AI在各个领域的应用/</id>
+    <published>2024-07-09T09:05:01.000Z</published>
+    <updated>2024-07-09T09:33:35.046Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>此篇总结一下目前生成式AI在企业中的研发实践。作为一个大数据开发出身的我来说，越来越感受到 AI+Algorithm+Data 的联合是多么的神奇。</p><p><em>注：以下总结来源于infoQ研究报告摘要。</em></p><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><h4 id="办公"><a href="#办公" class="headerlink" title="办公"></a>办公</h4><ul><li>文本信息的处理和生成</li><li>数据分析</li><li>个人办公助理</li><li>图像信息的处理和生成</li><li>PPT生成和美化</li></ul><h4 id="教育"><a href="#教育" class="headerlink" title="教育"></a>教育</h4><ul><li>学习助手类</li><li>个性化教学方案生成</li><li>陪伴学习类</li><li>辅助教师作业批改</li><li>数据分析</li><li>练习题等作业自动生成</li></ul><a id="more"></a><h4 id="工业制造"><a href="#工业制造" class="headerlink" title="工业制造"></a>工业制造</h4><ul><li>故障预警</li><li>机器人</li><li>产品设计优化</li><li>智能质检</li><li>智能家居产品设计</li><li>供应链管理</li></ul><h4 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h4><ul><li>数据分析</li><li>智能客服</li><li>智能风控</li><li>智能投研</li><li>应用研发过程中应用</li><li>营销过程应用</li><li>文本、图像和音频素材生成</li></ul><p><strong>存在算力、数据治理等诸多成本和监管问题，隐私计算也是值得关注。金融场下更多的在数据分析场景的应用。</strong></p><h4 id="社交"><a href="#社交" class="headerlink" title="社交"></a>社交</h4><ul><li>生活助理类</li><li>虚拟陪伴类</li><li>交友类</li></ul><h4 id="消费零售"><a href="#消费零售" class="headerlink" title="消费零售"></a>消费零售</h4><ul><li>智能影响</li><li>个性化推荐</li><li>商品信息生成</li><li>智能客服</li><li>数字人直播带货</li></ul><h4 id="汽车"><a href="#汽车" class="headerlink" title="汽车"></a>汽车</h4><ul><li>辅助驾驶</li><li>智能座舱</li><li>汽车生产过程数据分析</li><li>新能源汽车电池情况监测</li><li>汽车生活残过程的质量检测</li></ul><p><strong>可归类为驾驶安全和互动体验两个方面。针对驾驶安全，开发者期待搭配数字孪生技术进行仿真测试。</strong></p><h4 id="游戏"><a href="#游戏" class="headerlink" title="游戏"></a>游戏</h4><ul><li>游戏研发过程应用</li><li>NPC生成</li><li>文本到图像的生成</li><li>游戏场景设计</li><li>剧本生成</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;题记&quot;&gt;&lt;a href=&quot;#题记&quot; class=&quot;headerlink&quot; title=&quot;题记&quot;&gt;&lt;/a&gt;题记&lt;/h3&gt;&lt;p&gt;此篇总结一下目前生成式AI在企业中的研发实践。作为一个大数据开发出身的我来说，越来越感受到 AI+Algorithm+Data 的联合是多么的神奇。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;注：以下总结来源于infoQ研究报告摘要。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&quot;场景&quot;&gt;&lt;a href=&quot;#场景&quot; class=&quot;headerlink&quot; title=&quot;场景&quot;&gt;&lt;/a&gt;场景&lt;/h3&gt;&lt;h4 id=&quot;办公&quot;&gt;&lt;a href=&quot;#办公&quot; class=&quot;headerlink&quot; title=&quot;办公&quot;&gt;&lt;/a&gt;办公&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;文本信息的处理和生成&lt;/li&gt;
+&lt;li&gt;数据分析&lt;/li&gt;
+&lt;li&gt;个人办公助理&lt;/li&gt;
+&lt;li&gt;图像信息的处理和生成&lt;/li&gt;
+&lt;li&gt;PPT生成和美化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;教育&quot;&gt;&lt;a href=&quot;#教育&quot; class=&quot;headerlink&quot; title=&quot;教育&quot;&gt;&lt;/a&gt;教育&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;学习助手类&lt;/li&gt;
+&lt;li&gt;个性化教学方案生成&lt;/li&gt;
+&lt;li&gt;陪伴学习类&lt;/li&gt;
+&lt;li&gt;辅助教师作业批改&lt;/li&gt;
+&lt;li&gt;数据分析&lt;/li&gt;
+&lt;li&gt;练习题等作业自动生成&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="AI" scheme="http://alanzhang.me/categories/AI/"/>
+    
+    
+      <category term="2024" scheme="http://alanzhang.me/tags/2024/"/>
+    
+      <category term="生成式AI" scheme="http://alanzhang.me/tags/%E7%94%9F%E6%88%90%E5%BC%8FAI/"/>
+    
+      <category term="人工智能" scheme="http://alanzhang.me/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    
+  </entry>
   
   <entry>
     <title>2022想说点什么</title>
@@ -143,9 +185,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
-    
       <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
     
       <category term="表压缩" scheme="http://alanzhang.me/tags/%E8%A1%A8%E5%8E%8B%E7%BC%A9/"/>
     
@@ -195,11 +237,11 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="Alluxio" scheme="http://alanzhang.me/tags/Alluxio/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -226,9 +268,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="spark" scheme="http://alanzhang.me/tags/spark/"/>
     
@@ -364,9 +406,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
       <category term="集群优化" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96/"/>
     
@@ -496,11 +538,11 @@
     
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -536,31 +578,6 @@
       <category term="哈巴雪山" scheme="http://alanzhang.me/tags/%E5%93%88%E5%B7%B4%E9%9B%AA%E5%B1%B1/"/>
     
       <category term="丽江" scheme="http://alanzhang.me/tags/%E4%B8%BD%E6%B1%9F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>渡劫</title>
-    <link href="http://alanzhang.me/2018/09/16/%E6%B8%A1%E5%8A%AB/"/>
-    <id>http://alanzhang.me/2018/09/16/渡劫/</id>
-    <published>2018-09-16T10:07:19.000Z</published>
-    <updated>2019-02-26T15:14:20.409Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/09/%E6%9D%82%E8%B0%88/20180916.png" alt></p><p>距上次博文更新已经好几个月了，一直没有更新。一方面，是自己在这半年时间里一直做技术沉淀（大部分属于技术总结类），所以没有同步更新到博客上。喜欢的可以移步文末个人公众号浏览。再者，开始考虑进行工作调整（7月面试，8月确定，9月入职）。目前已在新东家上班数日。适应了节奏，缓了缓，想了想，还是做一下“渡劫”后的感受。</p><a id="more"></a><h3 id="主体"><a href="#主体" class="headerlink" title="主体"></a>主体</h3><p>舒适期让人失去了危机感，前东家，公司系统成型，主要工作是维护和业务优化；为了适应市场需求，公司做了多次架构调整。在舒适区的自己变得懈怠，缺少激情。于是乎，产生了“渡劫”的想法。</p><p>7月初，整理了简历，投递到某平台。第二天就收到了面试邀请。经历几次面试过程，拿到一些offer，有交流很愉快的，也有被虐的很惨的。大数据相关背景出身，在和面试官交流中，体会到自己对这块领域的认知还是浮在上面。最终选择了一家数据相关工作，和现有的职务匹配。7月下旬，确定offer。8月提出离职，9月入职。</p><p>入职，带着小小的期待。新东家的技术架构不同于前公司，不过也是业界成熟度很高的，数据部门的产品形态相比更加细化。目前看来，数据产品是在进行新老更替。这也是一家公司从创业到上市；业务从试探，到成熟；产品也是不断在迭代适应中改变。历史的“车轮”无法带动目前庞大的“车体”，只能换“架子”。</p><p>在入职几天里。自己接触到任务，不同于之前的系统，需要你学习，需要你去熟悉新的生态，新的团队，新的工作节奏。这是一个适应期，“渡劫”开始，是劳心的。</p><p>技术学习无止尽，感受到了团队的技术底蕴。需要自己付出更多的精力去应对。前期的舒适让自己有些迷途。这么一看，正好是个棒槌敲打了自己，使得自己清醒很多。目前上下班消耗的时间太多。运动健身也慢慢从每日日程中抹去。“渡劫”开始，自己也调整了生活环境，想赢得更多的时间用于渡化自己（也不想失去自己的爱好）。博客更新也要持续进行。</p><h3 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h3><p><em>实迷途其未远，觉今是而昨非。</em></p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;题记&quot;&gt;&lt;a href=&quot;#题记&quot; class=&quot;headerlink&quot; title=&quot;题记&quot;&gt;&lt;/a&gt;题记&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;https://github.com/alanzhang211/blog-image/raw/master/2018/09/%E6%9D%82%E8%B0%88/20180916.png&quot; alt&gt;&lt;/p&gt;
-&lt;p&gt;距上次博文更新已经好几个月了，一直没有更新。一方面，是自己在这半年时间里一直做技术沉淀（大部分属于技术总结类），所以没有同步更新到博客上。喜欢的可以移步文末个人公众号浏览。再者，开始考虑进行工作调整（7月面试，8月确定，9月入职）。目前已在新东家上班数日。适应了节奏，缓了缓，想了想，还是做一下“渡劫”后的感受。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="生活感悟" scheme="http://alanzhang.me/categories/%E7%94%9F%E6%B4%BB%E6%84%9F%E6%82%9F/"/>
-    
-    
-      <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
-    
-      <category term="感悟" scheme="http://alanzhang.me/tags/%E6%84%9F%E6%82%9F/"/>
     
   </entry>
   
