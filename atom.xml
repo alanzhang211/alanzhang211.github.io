@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://alanzhang.me/"/>
-  <updated>2024-07-09T09:33:35.046Z</updated>
+  <updated>2024-07-09T13:40:31.952Z</updated>
   <id>http://alanzhang.me/</id>
   
   <author>
@@ -21,49 +21,7 @@
     <link href="http://alanzhang.me/2024/07/09/%E7%94%9F%E6%88%90%E5%BC%8FAI%E5%9C%A8%E5%90%84%E4%B8%AA%E9%A2%86%E5%9F%9F%E7%9A%84%E5%BA%94%E7%94%A8/"/>
     <id>http://alanzhang.me/2024/07/09/生成式AI在各个领域的应用/</id>
     <published>2024-07-09T09:05:01.000Z</published>
-    <updated>2024-07-09T09:33:35.046Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>此篇总结一下目前生成式AI在企业中的研发实践。作为一个大数据开发出身的我来说，越来越感受到 AI+Algorithm+Data 的联合是多么的神奇。</p><p><em>注：以下总结来源于infoQ研究报告摘要。</em></p><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><h4 id="办公"><a href="#办公" class="headerlink" title="办公"></a>办公</h4><ul><li>文本信息的处理和生成</li><li>数据分析</li><li>个人办公助理</li><li>图像信息的处理和生成</li><li>PPT生成和美化</li></ul><h4 id="教育"><a href="#教育" class="headerlink" title="教育"></a>教育</h4><ul><li>学习助手类</li><li>个性化教学方案生成</li><li>陪伴学习类</li><li>辅助教师作业批改</li><li>数据分析</li><li>练习题等作业自动生成</li></ul><a id="more"></a><h4 id="工业制造"><a href="#工业制造" class="headerlink" title="工业制造"></a>工业制造</h4><ul><li>故障预警</li><li>机器人</li><li>产品设计优化</li><li>智能质检</li><li>智能家居产品设计</li><li>供应链管理</li></ul><h4 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h4><ul><li>数据分析</li><li>智能客服</li><li>智能风控</li><li>智能投研</li><li>应用研发过程中应用</li><li>营销过程应用</li><li>文本、图像和音频素材生成</li></ul><p><strong>存在算力、数据治理等诸多成本和监管问题，隐私计算也是值得关注。金融场下更多的在数据分析场景的应用。</strong></p><h4 id="社交"><a href="#社交" class="headerlink" title="社交"></a>社交</h4><ul><li>生活助理类</li><li>虚拟陪伴类</li><li>交友类</li></ul><h4 id="消费零售"><a href="#消费零售" class="headerlink" title="消费零售"></a>消费零售</h4><ul><li>智能影响</li><li>个性化推荐</li><li>商品信息生成</li><li>智能客服</li><li>数字人直播带货</li></ul><h4 id="汽车"><a href="#汽车" class="headerlink" title="汽车"></a>汽车</h4><ul><li>辅助驾驶</li><li>智能座舱</li><li>汽车生产过程数据分析</li><li>新能源汽车电池情况监测</li><li>汽车生活残过程的质量检测</li></ul><p><strong>可归类为驾驶安全和互动体验两个方面。针对驾驶安全，开发者期待搭配数字孪生技术进行仿真测试。</strong></p><h4 id="游戏"><a href="#游戏" class="headerlink" title="游戏"></a>游戏</h4><ul><li>游戏研发过程应用</li><li>NPC生成</li><li>文本到图像的生成</li><li>游戏场景设计</li><li>剧本生成</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;题记&quot;&gt;&lt;a href=&quot;#题记&quot; class=&quot;headerlink&quot; title=&quot;题记&quot;&gt;&lt;/a&gt;题记&lt;/h3&gt;&lt;p&gt;此篇总结一下目前生成式AI在企业中的研发实践。作为一个大数据开发出身的我来说，越来越感受到 AI+Algorithm+Data 的联合是多么的神奇。&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;注：以下总结来源于infoQ研究报告摘要。&lt;/em&gt;&lt;/p&gt;
-&lt;h3 id=&quot;场景&quot;&gt;&lt;a href=&quot;#场景&quot; class=&quot;headerlink&quot; title=&quot;场景&quot;&gt;&lt;/a&gt;场景&lt;/h3&gt;&lt;h4 id=&quot;办公&quot;&gt;&lt;a href=&quot;#办公&quot; class=&quot;headerlink&quot; title=&quot;办公&quot;&gt;&lt;/a&gt;办公&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;文本信息的处理和生成&lt;/li&gt;
-&lt;li&gt;数据分析&lt;/li&gt;
-&lt;li&gt;个人办公助理&lt;/li&gt;
-&lt;li&gt;图像信息的处理和生成&lt;/li&gt;
-&lt;li&gt;PPT生成和美化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&quot;教育&quot;&gt;&lt;a href=&quot;#教育&quot; class=&quot;headerlink&quot; title=&quot;教育&quot;&gt;&lt;/a&gt;教育&lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;学习助手类&lt;/li&gt;
-&lt;li&gt;个性化教学方案生成&lt;/li&gt;
-&lt;li&gt;陪伴学习类&lt;/li&gt;
-&lt;li&gt;辅助教师作业批改&lt;/li&gt;
-&lt;li&gt;数据分析&lt;/li&gt;
-&lt;li&gt;练习题等作业自动生成&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="AI" scheme="http://alanzhang.me/categories/AI/"/>
-    
-    
-      <category term="2024" scheme="http://alanzhang.me/tags/2024/"/>
-    
-      <category term="生成式AI" scheme="http://alanzhang.me/tags/%E7%94%9F%E6%88%90%E5%BC%8FAI/"/>
-    
-      <category term="人工智能" scheme="http://alanzhang.me/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>生成式AI在各个领域的应用</title>
-    <link href="http://alanzhang.me/2024/07/09/%E7%94%9F%E6%88%90%E5%BC%8FAI%E5%9C%A8%E5%90%84%E4%B8%AA%E9%A2%86%E5%9F%9F%E7%9A%84%E5%BA%94%E7%94%A8%E7%9A%84%E5%89%AF%E6%9C%AC/"/>
-    <id>http://alanzhang.me/2024/07/09/生成式AI在各个领域的应用的副本/</id>
-    <published>2024-07-09T09:05:01.000Z</published>
-    <updated>2024-07-09T13:07:40.710Z</updated>
+    <updated>2024-07-09T13:40:31.952Z</updated>
     
     <content type="html"><![CDATA[<h3 id="题记"><a href="#题记" class="headerlink" title="题记"></a>题记</h3><p>此篇总结一下目前生成式AI在企业中的研发实践。作为一个大数据开发出身的我来说，越来越感受到 数据+算法+算力 人工智能三要素的紧密关系是多么重要。</p><p><em>注：以下总结来源于infoQ研究报告摘要。</em></p><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><h4 id="办公"><a href="#办公" class="headerlink" title="办公"></a>办公</h4><ul><li>文本信息的处理和生成</li><li>数据分析</li><li>个人办公助理</li><li>图像信息的处理和生成</li><li>PPT生成和美化</li></ul><h4 id="教育"><a href="#教育" class="headerlink" title="教育"></a>教育</h4><ul><li>学习助手类</li><li>个性化教学方案生成</li><li>陪伴学习类</li><li>辅助教师作业批改</li><li>数据分析</li><li>练习题等作业自动生成</li></ul><a id="more"></a><h4 id="工业制造"><a href="#工业制造" class="headerlink" title="工业制造"></a>工业制造</h4><ul><li>故障预警</li><li>机器人</li><li>产品设计优化</li><li>智能质检</li><li>智能家居产品设计</li><li>供应链管理</li></ul><h4 id="金融"><a href="#金融" class="headerlink" title="金融"></a>金融</h4><ul><li>数据分析</li><li>智能客服</li><li>智能风控</li><li>智能投研</li><li>应用研发过程中应用</li><li>营销过程应用</li><li>文本、图像和音频素材生成</li></ul><p><strong>存在算力、数据治理等诸多成本和监管问题，隐私计算也是值得关注。金融场下更多的在数据分析场景的应用。</strong></p><h4 id="社交"><a href="#社交" class="headerlink" title="社交"></a>社交</h4><ul><li>生活助理类</li><li>虚拟陪伴类</li><li>交友类</li></ul><h4 id="消费零售"><a href="#消费零售" class="headerlink" title="消费零售"></a>消费零售</h4><ul><li>智能影响</li><li>个性化推荐</li><li>商品信息生成</li><li>智能客服</li><li>数字人直播带货</li></ul><h4 id="汽车"><a href="#汽车" class="headerlink" title="汽车"></a>汽车</h4><ul><li>辅助驾驶</li><li>智能座舱</li><li>汽车生产过程数据分析</li><li>新能源汽车电池情况监测</li><li>汽车生活残过程的质量检测</li></ul><p><strong>可归类为驾驶安全和互动体验两个方面。针对驾驶安全，开发者期待搭配数字孪生技术进行仿真测试。</strong></p><h4 id="游戏"><a href="#游戏" class="headerlink" title="游戏"></a>游戏</h4><ul><li>游戏研发过程应用</li><li>NPC生成</li><li>文本到图像的生成</li><li>游戏场景设计</li><li>剧本生成</li></ul>]]></content>
     
@@ -168,9 +126,9 @@
       <category term="总结" scheme="http://alanzhang.me/categories/%E6%80%BB%E7%BB%93/"/>
     
     
-      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
-    
       <category term="总结" scheme="http://alanzhang.me/tags/%E6%80%BB%E7%BB%93/"/>
+    
+      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
     
   </entry>
   
@@ -227,9 +185,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
-    
       <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="2020" scheme="http://alanzhang.me/tags/2020/"/>
     
       <category term="表压缩" scheme="http://alanzhang.me/tags/%E8%A1%A8%E5%8E%8B%E7%BC%A9/"/>
     
@@ -279,11 +237,11 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
       <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="Alluxio" scheme="http://alanzhang.me/tags/Alluxio/"/>
-    
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
   </entry>
   
@@ -310,9 +268,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
-    
       <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="spark" scheme="http://alanzhang.me/tags/spark/"/>
     
@@ -372,9 +330,9 @@
     
       <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
-      <category term="数据治理" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/"/>
-    
       <category term="集群治理" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E6%B2%BB%E7%90%86/"/>
+    
+      <category term="数据治理" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E6%B2%BB%E7%90%86/"/>
     
   </entry>
   
@@ -448,9 +406,9 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
-    
       <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+      <category term="2019" scheme="http://alanzhang.me/tags/2019/"/>
     
       <category term="集群优化" scheme="http://alanzhang.me/tags/%E9%9B%86%E7%BE%A4%E4%BC%98%E5%8C%96/"/>
     
@@ -578,13 +536,48 @@
       <category term="大数据" scheme="http://alanzhang.me/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
     
     
-      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
       <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
     
       <category term="数据同步" scheme="http://alanzhang.me/tags/%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5/"/>
     
       <category term="DataX" scheme="http://alanzhang.me/tags/DataX/"/>
+    
+      <category term="大数据" scheme="http://alanzhang.me/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>十一哈巴雪山-丽江行</title>
+    <link href="http://alanzhang.me/2018/10/07/%E5%8D%81%E4%B8%80%E5%93%88%E5%B7%B4%E9%9B%AA%E5%B1%B1-%E4%B8%BD%E6%B1%9F%E8%A1%8C/"/>
+    <id>http://alanzhang.me/2018/10/07/十一哈巴雪山-丽江行/</id>
+    <published>2018-10-07T06:28:23.000Z</published>
+    <updated>2019-02-26T15:14:20.398Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>“读万卷书，不如行万里路。”这句话，时常被人挂在嘴边。渐渐地便对这就话欣然接受。旅行确实是历练人地最好方式之一。</p><p>喜欢一个人背着包，远离生活、工作中地种种羁绊。时间久了，好像也就那么回事。</p><p>今年的国庆，由于前期工作调整，没有好好规划。本来年初两个选择</p><ol><li>出国学习潜水，一直想了解深海的气世界。</li><li>去日本见基友，顺便了解下日本的ACG文化。</li></ol><p>就在假期前一个星期，才决定，去远足。于是，在一个户外群里看到了哈巴雪山的行程。想了想，这也不错呀，雪是见过不少，雪山确实没怎么上过。于是做了决定，但是仔细看了行程单，29号飞丽江。对于没有假期的我，有些犹豫了。就在出发当天下午开例会的时候，还在想要不要去。不过现在想来还是值得的，因为这次行程感受颇深，也经历了很多。自然，人性的碰撞。</p><a id="more"></a><h1 id="自然篇"><a href="#自然篇" class="headerlink" title="自然篇"></a>自然篇</h1><p>感受自然，接触自然。这是一篇不带有人性情感的阐述。</p><h2 id="D1-丽江-哈巴村"><a href="#D1-丽江-哈巴村" class="headerlink" title="D1-丽江-哈巴村"></a>D1-丽江-哈巴村</h2><p><strong>时间：9.30</strong></p><p><strong>地点：丽江，哈巴村</strong></p><h3 id="虎跳峡"><a href="#虎跳峡" class="headerlink" title="虎跳峡"></a>虎跳峡</h3><p>9.29号晚上十点飞机宁波出发，次日2点到达丽江机场。夜宿机场附近酒店，早上出发前往哈巴村。途中经过虎跳峡景区，被湍急的金沙江气势震撼到了。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E8%99%8E%E8%B7%B3%E5%B3%A1.png" alt="虎跳峡"></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E8%99%8E%E8%B7%B3%E5%B3%A1%E6%B5%B7%E6%8B%94.png" alt="虎跳峡海拔"></p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%89%8D%E5%BE%80%E5%93%88%E5%B7%B4%E6%9D%91.png" alt="前往哈巴村"></p><p>停留了大概1小时左右，随行9人匆匆赶往下一站-哈巴村。这也是此行登顶哈巴雪山的必经之地。</p><h3 id="哈巴村"><a href="#哈巴村" class="headerlink" title="哈巴村"></a>哈巴村</h3><p>哈巴村位于哈巴雪山西面山脚下，是一个以纳西族为主的村落，她把登山人和哈巴雪山紧密地联系在一起，是一个登山客云集的“沙木尼镇”。</p><p>是一个淳朴的小村落，问了当地人，这里有10多个少数名族，其中，汉族有100多户。在这里，以旅游业（依傍着哈巴雪山）为主。每户种植、养殖多数都是自给自足。这里海拔大概2k8左右，紫外线还是很强烈的。到了哈巴村已经快下午5点了，宁静的小村落，没有过多的时间去打量她，只能利用黄昏前的片刻时间去了解。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%93%88%E5%B7%B4%E6%9D%91.png" alt="哈巴村"></p><p>村里的植被很多，平日里在城市很难见到。印象比较深刻的就是那个甘甜的山梨啦，真的又脆又甜。本想离开哈巴村的时候买点回去。无奈次日下山后，天已经黑了。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%B1%B1%E6%A2%A8.png" alt="山梨"></p><h2 id="D2（哈巴村-哈巴大本营）"><a href="#D2（哈巴村-哈巴大本营）" class="headerlink" title="D2（哈巴村-哈巴大本营）"></a>D2（哈巴村-哈巴大本营）</h2><p><strong>时间：10.1</strong></p><p><strong>地点：哈巴村，哈巴大本营</strong></p><h3 id="哈巴村上山"><a href="#哈巴村上山" class="headerlink" title="哈巴村上山"></a>哈巴村上山</h3><p>早上按计划进行，早8点坐车到山脚下。整理着装，开始向哈巴雪山大本营进发。开始步入神秘的高原森林。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%8E%9F%E5%A7%8B%E6%A3%AE%E6%9E%97.png" alt="原始森林"></p><p>沿途看到一些被伐倒的树干，布满青苔。历史遗留的痕迹。“靠山吃山，靠水吃水。”以前，伐木养家也理所当然，现如今也慢慢开始转变。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E4%BC%90%E6%9C%A8.png" alt="伐木"></p><h3 id="大本营"><a href="#大本营" class="headerlink" title="大本营"></a>大本营</h3><p>大概走了4个小时，来到了海拔4k1的哈巴雪山大本营。这是一个不大的营地。几座山屋紧密的挨着。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%A4%A7%E6%9C%AC%E8%90%A5.png" alt="哈巴大本营"></p><p>这里位于雨线地带，所以，时不时都会伴有暴雨。晚上，吃了当地人精心准备的饭食后。随行人便开始准备明天用的登山装备。</p><p>计划次日3点出发，预示着这是一个不眠夜。深夜，外面风雨交加；屋内，各个都裹着被子。有人难以入睡，有人鼾声连连，有人则高反等等，形形色色，形态百样。</p><h2 id="D3（哈巴山-哈巴村）"><a href="#D3（哈巴山-哈巴村）" class="headerlink" title="D3（哈巴山-哈巴村）"></a>D3（哈巴山-哈巴村）</h2><p><strong>时间：10.2</strong></p><p><strong>地点：哈巴雪山，哈巴大本营，哈巴村</strong></p><p>随着一阵敲门声，人们从睡梦中醒来。登山向导来敲门了，也预示着，登山即将开始。</p><p>大伙儿喝了点粥，纷纷拿好背包，蓄势待发。凌晨的哈巴山很安静，雨水也停了。等着头灯就开始向上攀登。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E6%94%80%E7%99%BB.png" alt="攀登"></p><p>登顶途中，暴雨，大雪。保暖真的很重要。狂风，绝壁，安全第一位。大概在4k7的位置，看到了雪。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E9%80%94%E4%B8%AD.png" alt="途中"></p><p>11点多登顶，山顶能见度低，果然没有网上的好看。那种天气，一年也没有几次，真的看运气。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E7%99%BB%E9%A1%B6.png" alt="登顶"></p><p>停留片刻，便开始下撤，大概下午3点左右到达大本营。因为当天要回丽江，于是稍作休息。就开始下撤回哈巴村。回到哈巴村，已经是下午7点，天色也渐渐暗淡下来。</p><p>顾不上洗漱整理，稍微吃了点就上车前往丽江。</p><hr><h1 id="人性篇"><a href="#人性篇" class="headerlink" title="人性篇"></a>人性篇</h1><p>这是一篇人性的交流，摆脱自然，回归人心，体会人与人之间的友情，亲情，性情……</p><h2 id="D4（丽江）"><a href="#D4（丽江）" class="headerlink" title="D4（丽江）"></a>D4（丽江）</h2><p><strong>时间：10.3</strong></p><p><strong>地点：丽江，丽江古城</strong></p><p>3号凌晨到达丽江，入住了丽江古城内的一家民宿。民宿还不错，应该说整个古城内的建筑都有格调。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E6%B0%91%E5%AE%BF2.png" alt="民宿"></p><p>下山后，脱离尘嚣的我们再次进入闹市。在这里，需要考虑人与人之间的种种情感。待人处事，言辞举止似乎都需要去细细评味。和我同行的人中，大部分都年长于我。交流过程中，很多东西，很多处事之道不是很了解。可能也是自己圈子的缘故。有些东西我很难去体会，也不愿意去体会。可是，这就是人性，需要你去了解它。</p><p>丽江古城是一个充满神奇的地方。住进去，感觉就像进入了一个“万象城”。这一秒是这样，下一秒可能就是那样。在古城的映衬下，形形色色的人群穿梭其中。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E8%A1%97%E9%81%93.png" alt="街道"></p><p>大概上午10点多，古城内才渐渐出现人的身影。据了解，这里的生活节奏都比较慢。古城还是蛮大的，街道纵横交错。特色饰品店，小吃店，音乐酒吧（晚上才开）等等散落于古城之中。丽江的茶文化给我感触挺深刻的。可能是随行人中很多都对茶道略知一二，而且，住的民宿也是个茶文化很深的。老板还亲自泡茶给我们喝。喝茶中，对茶也有了更深刻的理解。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E5%96%9D%E8%8C%B6.png" alt="喝茶"></p><p>晚上，夜色降临。昏暗的路灯下，看不太清人的脸。散落于城中的酒吧也开始喧嚣起来。说起酒吧，这算是我第二次来了吧。第一次还是刚工作那会，去的一个清吧。第一次来这种热闹的音乐吧。也喝了一些第一次喝的酒。</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E9%85%92%E5%90%A7.png" alt="酒吧"></p><p>古城内，经历了很多人生中的第一次，第一次这么正规的品茶等等（此处省略若干字）。</p><h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>以一张朦胧之美结束此次十一之行，慢慢品味！</p><p><img src="https://github.com/alanzhang211/blog-image/raw/master/2018/10/%E6%88%B7%E5%A4%96/%E4%BA%BA.png" alt="人"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;序&quot;&gt;&lt;a href=&quot;#序&quot; class=&quot;headerlink&quot; title=&quot;序&quot;&gt;&lt;/a&gt;序&lt;/h1&gt;&lt;p&gt;“读万卷书，不如行万里路。”这句话，时常被人挂在嘴边。渐渐地便对这就话欣然接受。旅行确实是历练人地最好方式之一。&lt;/p&gt;
+&lt;p&gt;喜欢一个人背着包，远离生活、工作中地种种羁绊。时间久了，好像也就那么回事。&lt;/p&gt;
+&lt;p&gt;今年的国庆，由于前期工作调整，没有好好规划。本来年初两个选择&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;出国学习潜水，一直想了解深海的气世界。&lt;/li&gt;
+&lt;li&gt;去日本见基友，顺便了解下日本的ACG文化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;就在假期前一个星期，才决定，去远足。于是，在一个户外群里看到了哈巴雪山的行程。想了想，这也不错呀，雪是见过不少，雪山确实没怎么上过。于是做了决定，但是仔细看了行程单，29号飞丽江。对于没有假期的我，有些犹豫了。就在出发当天下午开例会的时候，还在想要不要去。不过现在想来还是值得的，因为这次行程感受颇深，也经历了很多。自然，人性的碰撞。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="行万里路" scheme="http://alanzhang.me/categories/%E8%A1%8C%E4%B8%87%E9%87%8C%E8%B7%AF/"/>
+    
+    
+      <category term="2018" scheme="http://alanzhang.me/tags/2018/"/>
+    
+      <category term="十一" scheme="http://alanzhang.me/tags/%E5%8D%81%E4%B8%80/"/>
+    
+      <category term="哈巴雪山" scheme="http://alanzhang.me/tags/%E5%93%88%E5%B7%B4%E9%9B%AA%E5%B1%B1/"/>
+    
+      <category term="丽江" scheme="http://alanzhang.me/tags/%E4%B8%BD%E6%B1%9F/"/>
     
   </entry>
   
